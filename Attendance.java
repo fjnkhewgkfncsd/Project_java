@@ -8,7 +8,7 @@ public class Attendance {
     protected String personId;
     protected String status;
     protected String remarks;
-    private ArrayList<String> attendanceRecords = new ArrayList<>();
+    protected ArrayList<String> attendanceRecords = new ArrayList<>();
 
     // Constructor
     public Attendance(LocalDate date, LocalTime time, String personId, String status, String remarks) {
@@ -36,11 +36,10 @@ public class Attendance {
     public String getRemarks() { return remarks; }
     public void setRemarks(String remarks) { this.remarks = remarks; }
 
-    public void submitAttendance(LocalDate date, boolean isPresent) {
+    public void submitAttendance(LocalDate date,LocalTime time, boolean isPresent) {
         String record = "Date: " + date + ", Present: " + (isPresent ? "Yes" : "No");
         attendanceRecords.add(record);
     }
-
     public void checkAttendance() {
         System.out.println("Attendance Records for staffId " + personId + ":");
         for (String record : attendanceRecords) {

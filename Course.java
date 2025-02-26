@@ -73,10 +73,10 @@ public class Course {
     @Override
     public String toString() {
         return "Course Code: " + courseCode + "\n" +
-               "Course Name: " + courseName + "\n" +
-               "Credit Hours: " + creditHours + "\n" +
-               "Lecturer: " + lecturer.getName() + "\n" +
-               "Schedule: " + schedule + "\n" +
-               "Classroom: " + classroom;
+        "Course Name: " + courseName + "\n" +
+        "Credit Hours: " + creditHours + "\n" +
+        "Lecturer: " + lecturer.getName() + "\n" +
+        "Schedule: " + schedule + "\n" +
+        "Classroom: " + classroom;
     }
 }
