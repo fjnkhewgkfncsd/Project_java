@@ -65,4 +65,25 @@ public class Staff extends User {
                 ", salary=" + salary +
                 '}';
     }
+    public boolean equals(Object obj){
+        if(obj==this){
+            return true;
+        }
+        if(obj==null || obj.getClass()!=this.getClass()){
+            return false;
+        }
+        Staff staff = (Staff) obj;
+        return staffId == staff.staffId && position.equals(staff.position) && hireDate.equals(staff.hireDate) && endDate.equals(staff.endDate) && salary == staff.salary;
+    }
+    public void submitAttendance(Attendance attendance) {
+        Attendance record = new Attendance(attendance.getDate(), attendance.getTime(), staffId, attendance.getStatus(), attendance.getRemarks());
+        attendanceList.add(record);
+        System.out.println("✅ Attendance recorded for Staff: " + name);
+    }
+    public void checkAttendance() {
+        System.out.println("📌 Attendance Records for Staff " + name + " (ID: " + staffId + "):");
+        for (Attendance record : attendanceList) {
+            System.out.println(record.getDate() + " - " + record.getStatus());
+        }
+    }
 }

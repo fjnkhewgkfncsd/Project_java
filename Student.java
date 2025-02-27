@@ -1,3 +1,5 @@
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList; 
 import java.util.List;
 public class Student extends User {
@@ -26,11 +28,17 @@ public class Student extends User {
         return true;
     }
 
-    public void submitAttendent(String username,String password){
-        return;
+    public void submitAttendance( String courseId, String status, String remarks) {
+        StudentAttendance newRecord = new StudentAttendance(getId(),courseId, status, remarks);
+        attendance.add(newRecord);
+        System.out.println("✅ Attendance recorded for Student: " + name + " in Course: " + courseId);
     }
-    public void checkAttendent(String username,String password){
-        return;
+
+    public void checkAttendance() {
+        System.out.println("📌 Attendance Records for Student " + name + " (ID: " + id + "):");
+        for (StudentAttendance record : attendance) {
+            System.out.println(record.getDate() + " - " + record.getStatus() + " - Course: " + record.getCourseId());
+        }
     }
 
     // Getters (Allow reading values)
