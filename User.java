@@ -24,7 +24,7 @@ public class User implements Manage {
     public boolean login(String email, String password) {
         return this.email.equals(email) && this.password.equals(password);
     }
-    public String toString(){
+    public String toString(){   
         return "name=" + name + '\'' +
                 ", email='" + email + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
