@@ -66,7 +66,7 @@ public class Staff extends User {
                 '}';
     }
     public boolean equals(Object obj){
-        if(obj==this){
+        if(obj==this){ 
             return true;
         }
         if(obj==null || obj.getClass()!=this.getClass()){
