@@ -12,6 +12,25 @@ public class Department {
         this.HOD = HOD;
         totalDepartments++;
     }
-
+    //toString 
+    public String toString() {
+        return "Department{" +
+                "name='" + name + '\'' +
+                ", location='" + location + '\'' +
+                ", Department_id='" + Department_id + '\'' +
+                ", HOD='" + HOD + '\'' +
+                '}';
+    }
+    //equals
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (obj == null || obj.getClass() != this.getClass()) {
+            return false;
+        }
+        Department d = (Department) obj;
+        return d.Department_id == this.Department_id;
+    }
 }
 
