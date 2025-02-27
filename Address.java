@@ -33,6 +33,34 @@ public class Address {
     public void setQuartier(String quartier) { this.quartier = quartier; }
     public void setStreetNumber(String streetNumber) { this.streetNumber = streetNumber; }
     public void setHomeNumber(String homeNumber) { this.homeNumber = homeNumber; }
+
+    // toString method
+    public String toString() {
+        return "Address{" +
+                "provinceMunicipality='" + provinceMunicipality + '\'' +
+                ", district='" + district + '\'' +
+                ", commune='" + commune + '\'' +
+                ", quartier='" + quartier + '\'' +
+                ", streetNumber='" + streetNumber + '\'' +
+                ", homeNumber='" + homeNumber + '\'' +
+                '}';
+    }
+    //equals
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (obj == null || obj.getClass() != this.getClass()) {
+            return false;
+        }
+        Address address = (Address) obj;
+        return address.provinceMunicipality.equals(this.provinceMunicipality) &&
+                address.district.equals(this.district) &&
+                address.commune.equals(this.commune) &&
+                address.quartier.equals(this.quartier) &&
+                address.streetNumber.equals(this.streetNumber) &&
+                address.homeNumber.equals(this.homeNumber);
+    }
 }
 
 
