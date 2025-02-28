@@ -1,7 +1,9 @@
 import java.util.ArrayList;
 import java.util.List;
-public class Staff extends User {
-    private int staffId;
+import java.time.LocalDate;
+import java.time.LocalTime;
+public class Staff extends User{
+    protected int staffId;
     String position;
     String hireDate;
     String endDate;
@@ -19,6 +21,7 @@ public class Staff extends User {
         staffList.add(this);
         attendanceList = new ArrayList<Attendance>();
     }
+    
     //getters
     public int getStaffId() { 
         return staffId;
@@ -76,7 +79,7 @@ public class Staff extends User {
         return staffId == staff.staffId && position.equals(staff.position) && hireDate.equals(staff.hireDate) && endDate.equals(staff.endDate) && salary == staff.salary;
     }
     public void submitAttendance(Attendance attendance) {
-        Attendance record = new Attendance(attendance.getDate(), attendance.getTime(), staffId, attendance.getStatus(), attendance.getRemarks());
+        Attendance record = new Attendance(attendance.getDate(), attendance.getTime(), this.staffId, attendance.getStatus(), attendance.getRemarks());
         attendanceList.add(record);
         System.out.println("✅ Attendance recorded for Staff: " + name);
     }

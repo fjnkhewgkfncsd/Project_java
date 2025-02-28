@@ -3,7 +3,7 @@ public class Admin implements Manage{
     String email;
     int phoneNumber;
     private String password;
-    // For register
+    // For signup
     public Admin(String username, String email, int phoneNumber, String password) {
         this.username = username;
         this.email = email;

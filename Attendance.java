@@ -1,6 +1,5 @@
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
 
 public class Attendance {
     protected LocalDate date;
@@ -31,7 +30,7 @@ public class Attendance {
     public void setTime(LocalTime time) { this.time = time; }
 
     public int getPersonId() { return personId; }
-    public void setPersonId(String personId) { this.personId = personId; }
+    public void setPersonId(int personId) { this.personId = personId; }
 
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
