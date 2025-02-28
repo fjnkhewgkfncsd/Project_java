@@ -59,7 +59,14 @@ public class Lecturer extends User {
         return lecturerList;
     }
 
-    public boolean login(String email, String password) {
+    public boolean login(String email, String password) throws LoginFailedException {
+        if (email == null || password == null) {
+            throw new LoginFailedException("❌ Email or password cannot be null!");
+        }
+        if (!this.email.equalsIgnoreCase(email) || !this.password.equals(password)) {
+            throw new LoginFailedException("❌ Invalid email or password!");
+        }
+        System.out.println("✅ Login successful for: " + name);
         return true;
     }
 

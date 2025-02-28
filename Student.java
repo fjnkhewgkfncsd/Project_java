@@ -18,11 +18,12 @@ public class Student extends User {
     }
 
     @Override
-    public boolean login(String username,String password){
-        if(this.password==password){
-            return true;
+    public boolean login(String email, String password) throws LoginFailedException {
+        if (!this.email.equals(email) || !this.password.equals(password)) {
+            throw new LoginFailedException("❌ Invalid email or password!");
         }
-        return false;
+        System.out.println("✅ Login successful for: " + name);
+        return true;
     }
     public boolean signup(String name,String password,String phonenumber,char sex,String dob,String email){
         return true;

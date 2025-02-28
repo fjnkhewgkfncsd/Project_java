@@ -16,11 +16,15 @@ public class Admin implements Manage{
         this.password = password;
     }
 
-    public boolean login(String email, String password) {
-        if(this.email.equals(email) && this.password.equals(password)){
-            return true;
+    public boolean login(String email, String password) throws LoginFailedException {
+        if (email == null || password == null) {
+            throw new LoginFailedException("❌ Email or password cannot be null!");
         }
-        return false;
+        if (!this.email.equalsIgnoreCase(email) || !this.password.equals(password)) {
+            throw new LoginFailedException("❌ Invalid email or password!");
+        }
+        System.out.println("✅ Login successful for: " + name);
+        return true;
     }
     public boolean signup(String name,String password,String phonenumber,char sex,String dob,String email){
         return true;
