@@ -82,18 +82,22 @@ public class Lecturer extends User {
 
     // Attendance management
     public void submitAttendance(String username, String password) {
-        if (login(username, password)) {
-            System.out.println("Attendance submitted successfully.");
-        } else {
-            System.out.println("Invalid credentials.");
+        try {
+            if (login(username, password)) {
+                System.out.println("Attendance submitted successfully.");
+            }
+        } catch (LoginFailedException e) {
+            System.out.println(e.getMessage());
         }
     }
 
     public void checkAttendance(String username, String password) {
-        if (login(username, password)) {
-            System.out.println("Checking attendance...");
-        } else {
-            System.out.println("Invalid credentials.");
+        try {
+            if (login(username, password)) {
+                System.out.println("Checking attendance...");
+            }
+        } catch (LoginFailedException e) {
+            System.out.println(e.getMessage());
         }
     }
     @Override

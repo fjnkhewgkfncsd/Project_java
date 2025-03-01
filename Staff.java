@@ -13,13 +13,13 @@ public class Staff extends User{
     static ArrayList<Staff> staffList = new ArrayList<>();
 
     public Staff(User s, String position, String hireDate, double salary) {
-        super(s.name, s.email, s.phoneNumber, s.password, s.dob, s.gender,s.address);
+        super(s.name, s.email, s.phoneNumber, s.password, s.dob, s.gender, s.address);
         this.staffId = totalStaffCount++;
         this.position = position;
         this.hireDate = hireDate;
         this.salary = salary;
         staffList.add(this);
-        attendanceList = new ArrayList<Attendance>();
+        attendanceList = new ArrayList<>();
     }
     
     //getters
@@ -79,14 +79,23 @@ public class Staff extends User{
         return staffId == staff.staffId && position.equals(staff.position) && hireDate.equals(staff.hireDate) && endDate.equals(staff.endDate) && salary == staff.salary;
     }
     public void submitAttendance(Attendance attendance) {
-        Attendance record = new Attendance(attendance.getDate(), attendance.getTime(), this.staffId, attendance.getStatus(), attendance.getRemarks());
-        attendanceList.add(record);
-        System.out.println("✅ Attendance recorded for Staff: " + name);
+        try {
+            Attendance record = new Attendance(attendance.getDate(), attendance.getTime(), staffId, attendance.getStatus(), attendance.getRemarks());
+            attendanceList.add(record);
+            System.out.println("✅ Attendance recorded for Staff: " + name);
+        } catch (Exception e) {
+            System.out.println("❌ Failed to submit attendance: " + e.getMessage());
+        }
     }
+
     public void checkAttendance() {
-        System.out.println("📌 Attendance Records for Staff " + name + " (ID: " + staffId + "):");
-        for (Attendance record : attendanceList) {
-            System.out.println(record.getDate() + " - " + record.getStatus());
+        try {
+            System.out.println("📌 Attendance Records for Staff " + name + " (ID: " + staffId + "):");
+            for (Attendance record : attendanceList) {
+                System.out.println(record.getDate() + " - " + record.getStatus());
+            }
+        } catch (Exception e) {
+            System.out.println("❌ Failed to check attendance: " + e.getMessage());
         }
     }
 }
