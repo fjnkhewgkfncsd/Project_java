@@ -20,6 +20,7 @@ public class StudentAttendance extends Attendance {
     
     public String getCourseId() { return courseId; }
     public void setCourseId(String courseId) { this.courseId = courseId; }
+    @Override
     public String toString() {
         return "StudentAttendance{" +
                 "date=" + date +
@@ -30,6 +31,7 @@ public class StudentAttendance extends Attendance {
                 ", courseId='" + courseId + '\'' +
                 '}';
     }
+    @Override
     public boolean equals(Object obj) {
         if (obj instanceof StudentAttendance) {
             StudentAttendance other = (StudentAttendance) obj;

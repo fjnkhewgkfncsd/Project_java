@@ -79,4 +79,16 @@ public class Course {
         "Schedule: " + schedule + "\n" +
         "Classroom: " + classroom;
     }
+    //equals
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (obj == null || obj.getClass() != this.getClass()) {
+            return false;
+        }
+        Course c = (Course) obj;
+        return c.courseCode.equals(this.courseCode);
+    }
 }

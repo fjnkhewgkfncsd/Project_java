@@ -1,3 +1,6 @@
+import java.util.ArrayList;
+import java.util.List;
+
 public class User implements Manage {
     protected String name;
     protected String email;
@@ -7,6 +10,7 @@ public class User implements Manage {
     protected char gender;
     protected Address address;
     static int totalUsers = 0;
+    private static List<User> allUsers = new ArrayList<>(); // List to store all users
 
     protected User(String name, String email, String phoneNumber, String password, String dob, char gender,Address address) {
         this.name = name;
@@ -17,20 +21,26 @@ public class User implements Manage {
         this.dob = dob;
         this.gender = gender;
         totalUsers++;
+        allUsers.add(this); // Add the new user to the list
     }
+    @Override
     public boolean signup(String name,String password,String phonenumber,char sex,String dob,String email){
         return true;
     }
+    @Override
     public boolean login(String email, String password) throws LoginFailedException {
-        if (email == null || password == null) {
-            throw new LoginFailedException("❌ Email or password cannot be null!");
-        }
-        if (!this.email.equalsIgnoreCase(email) || !this.password.equals(password)) {
+        try{
+            if (!this.email.equals(email) || !this.password.equals(password)) {
             throw new LoginFailedException("❌ Invalid email or password!");
+        }
+        }catch(NullPointerException e){
+            System.out.println(e.getMessage());
+            return false;
         }
         System.out.println("✅ Login successful for: " + name);
         return true;
     }
+    @Override
     public String toString(){   
         return "name=" + name + '\'' +
                 ", email='" + email + '\'' +

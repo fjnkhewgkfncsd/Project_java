@@ -17,18 +17,6 @@ public class Student extends User {
         attendance = new ArrayList<StudentAttendance>();
     }
 
-    @Override
-    public boolean login(String email, String password) throws LoginFailedException {
-        if (!this.email.equals(email) || !this.password.equals(password)) {
-            throw new LoginFailedException("❌ Invalid email or password!");
-        }
-        System.out.println("✅ Login successful for: " + name);
-        return true;
-    }
-    public boolean signup(String name,String password,String phonenumber,char sex,String dob,String email){
-        return true;
-    }
-
     public void submitAttendance( String courseId, String status, String remarks) {
         StudentAttendance newRecord = new StudentAttendance(getId(),courseId, status, remarks);
         attendance.add(newRecord);
@@ -50,7 +38,7 @@ public class Student extends User {
     // Setters (Allow modifying values)
     public void setCourse(List<Course> courses) { this.courses = courses; } 
     public void setAttendance(List<StudentAttendance> attendance) { this.attendance = attendance; }
-
+    @Override
     public String toString() {
         return super.toString() + "Student{" +
                 "id=" + id +
@@ -58,6 +46,7 @@ public class Student extends User {
                 ", attendance=" + attendance +
                 '}';
     }
+    @Override
     public boolean equals(Object obj){
         if(obj==this){
             return true;
@@ -68,5 +57,4 @@ public class Student extends User {
         Student s = (Student) obj;
         return s.id==this.id;
     }
-
 }

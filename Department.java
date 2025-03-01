@@ -13,6 +13,7 @@ public class Department {
         totalDepartments++;
     }
     //toString 
+    @Override
     public String toString() {
         return "Department{" +
                 "name='" + name + '\'' +
@@ -22,6 +23,7 @@ public class Department {
                 '}';
     }
     //equals
+    @Override
     public boolean equals(Object obj) {
         if (obj == this) {
             return true;

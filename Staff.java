@@ -68,6 +68,7 @@ public class Staff extends User{
                 ", salary=" + salary +
                 '}';
     }
+    @Override
     public boolean equals(Object obj){
         if(obj==this){ 
             return true;

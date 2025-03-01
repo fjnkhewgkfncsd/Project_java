@@ -17,16 +17,39 @@ public class Admin implements Manage{
     }
 
     public boolean login(String email, String password) throws LoginFailedException {
-        if (email == null || password == null) {
-            throw new LoginFailedException("❌ Email or password cannot be null!");
-        }
-        if (!this.email.equalsIgnoreCase(email) || !this.password.equals(password)) {
+        try{
+            if (!this.email.equals(email) || !this.password.equals(password)) {
             throw new LoginFailedException("❌ Invalid email or password!");
         }
-        System.out.println("✅ Login successful for: " + name);
+        }catch(NullPointerException e){
+            System.out.println(e.getMessage());
+            return false;
+        }
+        System.out.println("✅ Login successful for: " + username);
         return true;
     }
     public boolean signup(String name,String password,String phonenumber,char sex,String dob,String email){
         return true;
+    }
+    //toString 
+    @Override
+    public String toString() {
+        return "Admin{" +
+                "username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                ", phoneNumber=" + phoneNumber +
+                '}';
+    }
+    //equals
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (obj == null || obj.getClass() != this.getClass()) {
+            return false;
+        }
+        Admin a = (Admin) obj;
+        return a.email == this.email;
     }
 }

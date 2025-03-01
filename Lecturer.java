@@ -59,20 +59,6 @@ public class Lecturer extends User {
         return lecturerList;
     }
 
-    public boolean login(String email, String password) throws LoginFailedException {
-        if (email == null || password == null) {
-            throw new LoginFailedException("❌ Email or password cannot be null!");
-        }
-        if (!this.email.equalsIgnoreCase(email) || !this.password.equals(password)) {
-            throw new LoginFailedException("❌ Invalid email or password!");
-        }
-        System.out.println("✅ Login successful for: " + name);
-        return true;
-    }
-
-    public boolean signup(String name, String password, String phone_num, char sex, String dob, String email) {
-        return true;
-    }
 
     public void submitAttendance(String username, String password) {
         return;
@@ -89,6 +75,7 @@ public class Lecturer extends User {
                 ", salary=" + salary +
                 '}';
     } 
+    @Override
     public boolean equals(Object obj){
         if(obj==this){
             return true;

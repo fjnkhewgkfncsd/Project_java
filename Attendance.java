@@ -37,4 +37,22 @@ public class Attendance {
 
     public String getRemarks() { return remarks; }
     public void setRemarks(String remarks) { this.remarks = remarks; }
+    @Override
+    public String toString() {
+        return "StudentAttendance{" +
+                "date=" + date +
+                ", time=" + time +
+                ", personId=" + personId +
+                ", status='" + status + '\'' +
+                ", remarks='" + remarks + '\'' +
+                '}';
+    }
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Attendance) {
+            Attendance other = (Attendance) obj;
+            return date.equals(other.date) && time.equals(other.time) && personId == other.personId && status.equals(other.status) && remarks.equals(other.remarks);
+        }
+        return false;
+    }
 }
