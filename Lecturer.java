@@ -7,8 +7,9 @@ public class Lecturer extends User {
     private double salary;
     private ArrayList<Attendance> attendance;  
     private static ArrayList<Lecturer> lecturerList = new ArrayList<Lecturer>();
+
     public Lecturer(User s, String specialization, double salary) {
-        super(s.name, s.email, s.phoneNumber, s.password, s.dob, s.gender,s.address);
+        super(s.name, s.email, s.password, s.password, s.dob, s.gender,s.address);
         this.id = totalLecturers++;
         this.specialization = specialization;
         this.salary = salary;
@@ -28,7 +29,7 @@ public class Lecturer extends User {
     public double getSalary() {
         return salary;
     }
-    //setters
+    
     public void setSpecialization(String specialization) {
         this.specialization = specialization;
     }
@@ -53,7 +54,6 @@ public class Lecturer extends User {
         return null;
     }
 
-    // Remove displayAllLecturers method
 
     public static ArrayList<Lecturer> getLecturerList() {
         return lecturerList;
@@ -70,16 +70,31 @@ public class Lecturer extends User {
         return true;
     }
 
-    public boolean signup(String name, String password, String phone_num, char sex, String dob, String email) {
+    @Override
+    public boolean signup(String name, String password, String phoneNumber, char sex, String dob, String email) {
+        for (Lecturer lecturer : lecturerList) {
+            if (lecturer.email.equals(email)) {
+                return false; 
+            }
+        }
         return true;
     }
 
+    // Attendance management
     public void submitAttendance(String username, String password) {
-        return;
+        if (login(username, password)) {
+            System.out.println("Attendance submitted successfully.");
+        } else {
+            System.out.println("Invalid credentials.");
+        }
     }
 
     public void checkAttendance(String username, String password) {
-        return;
+        if (login(username, password)) {
+            System.out.println("Checking attendance...");
+        } else {
+            System.out.println("Invalid credentials.");
+        }
     }
     @Override
     public String toString(){
@@ -88,7 +103,8 @@ public class Lecturer extends User {
                 ", specialization='" + specialization + '\'' +
                 ", salary=" + salary +
                 '}';
-    } 
+    }
+    @Override 
     public boolean equals(Object obj){
         if(obj==this){
             return true;
