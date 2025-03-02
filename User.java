@@ -10,7 +10,7 @@ public class User implements Manage {
     protected char gender;
     protected Address address;
     static int totalUsers = 0;
-    private static List<User> allUsers = new ArrayList<>(); // List to store all users
+    protected static List<User> allUsers = new ArrayList<>(); // List to store all users
 
     protected User(String name, String email, String phoneNumber, String password, String dob, char gender,Address address) {
         this.name = name;
@@ -47,7 +47,8 @@ public class User implements Manage {
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", password='" + password + '\'' +
                 ", dob='" + dob + '\'' +
-                ", gender=" + gender;
+                ", gender=" + gender +
+                ", address=" + address;
     }
     
     //getters 

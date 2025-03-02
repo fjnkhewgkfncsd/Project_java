@@ -6,7 +6,7 @@ public class Student extends User {
     private int id;
     private List<Course> courses;
     private List<StudentAttendance> attendance;
-    private static int totalStudents = 0;
+    private static int totalStudents = 1;
 
     // Constructor for registration
     public Student(User s) {
@@ -15,6 +15,7 @@ public class Student extends User {
         totalStudents++;
         courses = new ArrayList<Course>();
         attendance = new ArrayList<StudentAttendance>();
+        allUsers.add(this);
     }
 
     public void submitAttendance( String courseId, String status, String remarks) {
