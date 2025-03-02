@@ -7,8 +7,9 @@ public class Lecturer extends User {
     private double salary;
     private ArrayList<Attendance> attendance;  
     private static ArrayList<Lecturer> lecturerList = new ArrayList<Lecturer>();
+
     public Lecturer(User s, String specialization, double salary) {
-        super(s.name, s.email, s.phoneNumber, s.password, s.dob, s.gender,s.address);
+        super(s.name, s.email, s.password, s.password, s.dob, s.gender,s.address);
         this.id = totalLecturers++;
         this.specialization = specialization;
         this.salary = salary;
@@ -28,7 +29,7 @@ public class Lecturer extends User {
     public double getSalary() {
         return salary;
     }
-    //setters
+    
     public void setSpecialization(String specialization) {
         this.specialization = specialization;
     }
@@ -53,7 +54,6 @@ public class Lecturer extends User {
         return null;
     }
 
-    // Remove displayAllLecturers method
 
     public static ArrayList<Lecturer> getLecturerList() {
         return lecturerList;
@@ -61,11 +61,23 @@ public class Lecturer extends User {
 
 
     public void submitAttendance(String username, String password) {
-        return;
+        try {
+            if (login(username, password)) {
+                System.out.println("Attendance submitted successfully.");
+            }
+        } catch (LoginFailedException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     public void checkAttendance(String username, String password) {
-        return;
+        try {
+            if (login(username, password)) {
+                System.out.println("Checking attendance...");
+            }
+        } catch (LoginFailedException e) {
+            System.out.println(e.getMessage());
+        }
     }
     @Override
     public String toString(){

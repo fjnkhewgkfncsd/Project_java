@@ -18,16 +18,24 @@ public class Student extends User {
         allUsers.add(this);
     }
 
-    public void submitAttendance( String courseId, String status, String remarks) {
-        StudentAttendance newRecord = new StudentAttendance(getId(),courseId, status, remarks);
-        attendance.add(newRecord);
-        System.out.println("✅ Attendance recorded for Student: " + name + " in Course: " + courseId);
+    public void submitAttendance(String courseId, String status, String remarks) {
+        try {
+            StudentAttendance newRecord = new StudentAttendance(getId(), courseId, status, remarks);
+            attendance.add(newRecord);
+            System.out.println("✅ Attendance recorded for Student: " + name + " in Course: " + courseId);
+        } catch (Exception e) {
+            System.out.println("❌ Failed to submit attendance: " + e.getMessage());
+        }
     }
 
     public void checkAttendance() {
-        System.out.println("📌 Attendance Records for Student " + name + " (ID: " + id + "):");
-        for (StudentAttendance record : attendance) {
-            System.out.println(record.getDate() + " - " + record.getStatus() + " - Course: " + record.getCourseId());
+        try {
+            System.out.println("📌 Attendance Records for Student " + name + " (ID: " + id + "):");
+            for (StudentAttendance record : attendance) {
+                System.out.println(record.getDate() + " - " + record.getStatus() + " - Course: " + record.getCourseId());
+            }
+        } catch (Exception e) {
+            System.out.println("❌ Failed to check attendance: " + e.getMessage());
         }
     }
 
