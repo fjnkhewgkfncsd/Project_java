@@ -1,4 +1,5 @@
-public class LoginFailedException extends Exception{
+
+public class LoginFailedException extends NullPointerException{
     public LoginFailedException(String message) {
         super(message);
     }

@@ -12,6 +12,8 @@ public class User implements Manage {
     static int totalUsers = 0;
     protected static List<User> allUsers = new ArrayList<>(); // List to store all users
 
+    protected User() {
+    }
     protected User(String name, String email, String phoneNumber, String password, String dob, char gender,Address address) {
         this.name = name;
         this.address = address;
@@ -20,20 +22,33 @@ public class User implements Manage {
         this.password = password;
         this.dob = dob;
         this.gender = gender;
+        this.address = address;
         totalUsers++;
-        allUsers.add(this); // Add the new user to the list
     }
     @Override
-    public boolean signup(String name,String password,String phonenumber,char sex,String dob,String email){
-        return true;
+    public User signup(String name,String password,String phonenumber,char sex,String dob,String email,Address address) {
+        String[] inputStrings = {name,password,phonenumber,dob,email};
+        try{
+            new CheckEmptyStringException(inputStrings);
+            new CheckEmptyStringException(name,"[a-zA-Z]+");
+            new NumberOnlyException(phonenumber,"[0-9]+");
+        }catch(CheckEmptyStringException e){
+            System.out.println(e.getMessage());
+            return null;
+        }catch(NumberOnlyException e){
+            System.out.println(e.getMessage());
+            return null;
+        }
+        User user = new User(name,email,phonenumber,password,dob,sex,address);
+        allUsers.add(user);
+        return user;
     }
     @Override
     public boolean login(String email, String password) throws LoginFailedException {
         try{
-            if (!this.email.equals(email) || !this.password.equals(password)) {
-            throw new LoginFailedException("❌ Invalid email or password!");
-        }
-        }catch(NullPointerException e){
+            String[] inputStrings = {email,password};
+            new CheckEmptyStringException(inputStrings);
+        }catch(CheckEmptyStringException e){
             System.out.println(e.getMessage());
             return false;
         }
