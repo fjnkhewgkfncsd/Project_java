@@ -15,7 +15,7 @@ public class Address {
         this.quartier = quartier;
         this.streetNumber = streetNumber;
         this.homeNumber = homeNumber;
-        this.totalAddress++;
+        totalAddress++;
     }
 
     // Getters (Allow controlled access to private fields)

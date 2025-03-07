@@ -28,7 +28,7 @@ public class Admin implements Manage{
         System.out.println("✅ Login successful for: " + username);
         return true;
     }
-    public User signup(String name,String password,String phonenumber,char sex,String dob,String email){
+    public User signup(String name,String password,String phonenumber,char sex,String dob,String email,Address address) {
         return null;
     }
     //toString 
