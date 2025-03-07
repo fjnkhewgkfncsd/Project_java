@@ -1,0 +1,76 @@
+name=Hengly', email='user123@example.com', phoneNumber='1234567890', password='password', dob='1990-01-01', gender=M, address=Address{provinceMunicipality='123 Main St', district='Anytown', commune='CA', quartier='12345', streetNumber='abc', homeNumber='hi'}Staff{staffId=0, position='Manager', hireDate='2021-01-01', endDate='null', salary=1000.0}
+name=nobody', email='user123@example.com', phoneNumber='password', password='password', dob='1990-01-01', gender=M, address=Address{provinceMunicipality='123 Main St', district='Anytown', commune='CA', quartier='12345', streetNumber='abc', homeNumber='hi'}Lecturer{id=0, specialization='Math', salary=2000.0}
+name=Heng', email='user123@example.com', phoneNumber='1234567890', password='password', dob='1990-01-01', gender=M, address=Address{provinceMunicipality='123 Main St', district='Anytown', commune='CA', quartier='12345', streetNumber='abc', homeNumber='hi'}Student{id=1, courses=[Course Code: Math
+Course Name: MATH101
+Credit Hours: 3
+Lecturer: nobody
+Schedule: MWF 9:00-10:00
+Classroom: Room 101, Course Code: English
+Course Name: ENGL101
+Credit Hours: 3
+Lecturer: nobody
+Schedule: MWF 10-11:00
+Classroom: Room 102], attendance=[]}
+name=Hengly', email='user123@example.com', phoneNumber='1234567890', password='password', dob='1990-01-01', gender=M, address=Address{provinceMunicipality='123 Main St', district='Anytown', commune='CA', quartier='12345', streetNumber='abc', homeNumber='hi'}Staff{staffId=0, position='Manager', hireDate='2021-01-01', endDate='null', salary=1000.0}
+name=nobody', email='user123@example.com', phoneNumber='password', password='password', dob='1990-01-01', gender=M, address=Address{provinceMunicipality='123 Main St', district='Anytown', commune='CA', quartier='12345', streetNumber='abc', homeNumber='hi'}Lecturer{id=0, specialization='Math', salary=2000.0}
+name=Heng', email='user123@example.com', phoneNumber='1234567890', password='password', dob='1990-01-01', gender=M, address=Address{provinceMunicipality='123 Main St', district='Anytown', commune='CA', quartier='12345', streetNumber='abc', homeNumber='hi'}Student{id=1, courses=[Course Code: Math
+Course Name: MATH101
+Credit Hours: 3
+Lecturer: nobody
+Schedule: MWF 9:00-10:00
+Classroom: Room 101, Course Code: English
+Course Name: ENGL101
+Credit Hours: 3
+Lecturer: nobody
+Schedule: MWF 10-11:00
+Classroom: Room 102], attendance=[]}
+name=Heng', email='user123@example.com', phoneNumber='1234567890', password='password', dob='1990-01-01', gender=M, address=Address{provinceMunicipality='123 Main St', district='Anytown', commune='CA', quartier='12345', streetNumber='abc', homeNumber='hi'}Student{id=1, courses=[Course Code: Math
+Course Name: MATH101
+Credit Hours: 3
+Lecturer: nobody
+Schedule: MWF 9:00-10:00
+Classroom: Room 101, Course Code: English
+Course Name: ENGL101
+Credit Hours: 3
+Lecturer: nobody
+Schedule: MWF 10-11:00
+Classroom: Room 102], attendance=[]}
+name=Hengly', email='user123@example.com', phoneNumber='1234567890', password='password', dob='1990-01-01', gender=M, address=Address{provinceMunicipality='123 Main St', district='Anytown', commune='CA', quartier='12345', streetNumber='abc', homeNumber='hi'}Staff{staffId=0, position='Manager', hireDate='2021-01-01', endDate='null', salary=1000.0}
+name=nobody', email='user123@example.com', phoneNumber='password', password='password', dob='1990-01-01', gender=M, address=Address{provinceMunicipality='123 Main St', district='Anytown', commune='CA', quartier='12345', streetNumber='abc', homeNumber='hi'}Lecturer{id=0, specialization='Math', salary=2000.0}
+name=Hengly', email='user123@example.com', phoneNumber='1234567890', password='password', dob='1990-01-01', gender=M, address=Address{provinceMunicipality='123 Main St', district='Anytown', commune='CA', quartier='12345', streetNumber='abc', homeNumber='hi'}Staff{staffId=0, position='Manager', hireDate='2021-01-01', endDate='null', salary=1000.0}
+name=nobody', email='user123@example.com', phoneNumber='password', password='password', dob='1990-01-01', gender=M, address=Address{provinceMunicipality='123 Main St', district='Anytown', commune='CA', quartier='12345', streetNumber='abc', homeNumber='hi'}Lecturer{id=0, specialization='Math', salary=2000.0}
+name=Heng', email='user123@example.com', phoneNumber='1234567890', password='password', dob='1990-01-01', gender=M, address=Address{provinceMunicipality='123 Main St', district='Anytown', commune='CA', quartier='12345', streetNumber='abc', homeNumber='hi'}Student{id=1, courses=[Course Code: Math
+Course Name: MATH101
+Credit Hours: 3
+Lecturer: nobody
+Schedule: MWF 9:00-10:00
+Classroom: Room 101, Course Code: English
+Course Name: ENGL101
+Credit Hours: 3
+Lecturer: nobody
+Schedule: MWF 10-11:00
+Classroom: Room 102], attendance=[]}
+name=Hengly', email='user123@example.com', phoneNumber='1234567890', password='password', dob='1990-01-01', gender=M, address=Address{provinceMunicipality='123 Main St', district='Anytown', commune='CA', quartier='12345', streetNumber='abc', homeNumber='hi'}Staff{staffId=0, position='Manager', hireDate='2021-01-01', endDate='null', salary=1000.0}
+name=Heng', email='user123@example.com', phoneNumber='1234567890', password='password', dob='1990-01-01', gender=M, address=Address{provinceMunicipality='123 Main St', district='Anytown', commune='CA', quartier='12345', streetNumber='abc', homeNumber='hi'}Student{id=1, courses=[Course Code: Math
+Course Name: MATH101
+Credit Hours: 3
+Lecturer: nobody
+Schedule: MWF 9:00-10:00
+Classroom: Room 101, Course Code: English
+Course Name: ENGL101
+Credit Hours: 3
+Lecturer: nobody
+Schedule: MWF 10-11:00
+Classroom: Room 102], attendance=[]}
+name=Hengly', email='user123@example.com', phoneNumber='1234567890', password='password', dob='1990-01-01', gender=M, address=Address{provinceMunicipality='123 Main St', district='Anytown', commune='CA', quartier='12345', streetNumber='abc', homeNumber='hi'}Staff{staffId=0, position='Manager', hireDate='2021-01-01', endDate='null', salary=1000.0}
+name=Heng', email='user123@example.com', phoneNumber='1234567890', password='password', dob='1990-01-01', gender=M, address=Address{provinceMunicipality='123 Main St', district='Anytown', commune='CA', quartier='12345', streetNumber='abc', homeNumber='hi'}Student{id=1, courses=[Course Code: Math
+Course Name: MATH101
+Credit Hours: 3
+Lecturer: nobody
+Schedule: MWF 9:00-10:00
+Classroom: Room 101, Course Code: English
+Course Name: ENGL101
+Credit Hours: 3
+Lecturer: nobody
+Schedule: MWF 10-11:00
+Classroom: Room 102], attendance=[]}

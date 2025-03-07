@@ -1,5 +1,10 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.FileWriter;
+import java.io.BufferedReader;
+import java.io.FileReader;
 
 public class User implements Manage {
     protected String name;
@@ -32,6 +37,9 @@ public class User implements Manage {
             new CheckEmptyStringException(inputStrings);
             new CheckEmptyStringException(name,"[a-zA-Z]+");
             new NumberOnlyException(phonenumber,"[0-9]+");
+            CheckEmptyStringException.Checkemailexception(email);
+            CheckEmptyStringException.Checkdobexception(dob);
+            CheckEmptyStringException.Checksexexception(sex);
         }catch(CheckEmptyStringException e){
             System.out.println(e.getMessage());
             return null;
@@ -110,4 +118,40 @@ public class User implements Manage {
     public void setAddress(Address address) {
         this.address = address;
     }
+    //write file
+    void writeToFile() {
+        try{
+            BufferedWriter writer = new BufferedWriter(new FileWriter("users.txt",true));
+            writer.write(toString());
+            writer.newLine();
+            writer.close();
+        }catch(IOException e){  
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }    
+    }
+    void readFromFile() {
+        try{
+            BufferedReader reader = new BufferedReader(new FileReader("users.txt"));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                System.out.println(line);
+            }
+            reader.close();
+        }catch(IOException e){
+            System.out.println("An error occurred.");
+            e.printStackTrace(); 
+        }
+    }
+    //equals
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null || getClass() != obj.getClass())
+            return false;
+        User user = (User) obj; 
+        return this.email.equals(user.email) && this.password.equals(user.password);
+    }
+
 }

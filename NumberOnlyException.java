@@ -7,9 +7,6 @@ public class NumberOnlyException extends NumberFormatException {
         if(!inpuString.matches(formaString))
         {
             throw new NumberOnlyException("Number only");
-        }else
-        {
-            System.out.println("Your correct number input is: "+inpuString);  
         }
     }
 }
