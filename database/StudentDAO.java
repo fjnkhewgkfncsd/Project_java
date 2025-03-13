@@ -1,12 +1,11 @@
 package database;
-import database.MySqlConnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class StudentDAO {
     public void addStudent(String name, String email, String phone, String password, String dob, String gender, String address) {
-        Connection conn = MySqlConnection.connect();
+        Connection conn = DatabaseConnection.getConnection();
         if (conn == null) return; // Stop execution if connection fails
 
         String sql = "INSERT INTO student (name, email, phone_number, password, dob, gender, address) VALUES (?, ?, ?, ?, ?, ?, ?)";
@@ -19,7 +18,6 @@ public class StudentDAO {
             pstmt.setString(5, dob);
             pstmt.setString(6, gender);
             pstmt.setString(7, address);
-
             int rowsAffected = pstmt.executeUpdate();
             if (rowsAffected > 0) {
                 System.out.println("✅ Student added successfully!");
@@ -29,7 +27,7 @@ public class StudentDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            MySqlConnection.closeConnection(conn);
+            DatabaseConnection.closeConnection();
         }
     }
 }
