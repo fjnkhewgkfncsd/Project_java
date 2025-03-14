@@ -1,5 +1,7 @@
+package models;
 import java.util.ArrayList;
 import java.util.List;
+import exceptions.*;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.FileWriter;
@@ -17,7 +19,7 @@ public class User implements Manage {
     static int totalUsers = 0;
     protected static List<User> allUsers = new ArrayList<>(); // List to store all users
 
-    protected User() {
+    public User() {
     }
     protected User(String name, String email, String phoneNumber, String password, String dob, char gender,Address address) {
         this.name = name;
@@ -52,7 +54,7 @@ public class User implements Manage {
         return user;
     }
     @Override
-    public boolean login(String email, String password) throws LoginFailedException {
+    public boolean login(String email, String password){
         try{
             String[] inputStrings = {email,password};
             new CheckEmptyStringException(inputStrings);

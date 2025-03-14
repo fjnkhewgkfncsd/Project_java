@@ -1,3 +1,4 @@
+package exceptions;
 public class NumberOnlyException extends NumberFormatException {
     
     public NumberOnlyException(String message) {

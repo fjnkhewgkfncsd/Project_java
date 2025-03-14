@@ -1,3 +1,4 @@
+package models;
 public class Department {
     static int totalDepartments = 0;
     private String name;

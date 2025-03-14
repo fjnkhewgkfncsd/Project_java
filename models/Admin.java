@@ -1,3 +1,5 @@
+package models;
+import exceptions.*;
 public class Admin implements Manage{
     String username;
     String email;
@@ -16,12 +18,11 @@ public class Admin implements Manage{
         this.password = password;
     }
 
-    public boolean login(String email, String password) throws LoginFailedException {
+    public boolean login(String email, String password){
         try{
-            if (!this.email.equals(email) || !this.password.equals(password)) {
-            throw new LoginFailedException("❌ Invalid email or password!");
-        }
-        }catch(NullPointerException e){
+            String[] inputStrings = {email,password};
+            new CheckEmptyStringException(inputStrings);
+        }catch(CheckEmptyStringException e){
             System.out.println(e.getMessage());
             return false;
         }

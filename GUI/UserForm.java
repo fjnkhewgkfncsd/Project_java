@@ -1,5 +1,7 @@
 package GUI;
 import javax.swing.*;
+import models.*;
+import exceptions.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -58,24 +60,19 @@ public class UserForm extends JFrame {
         gbc.gridx = 1;
         passwordField = new JPasswordField(15);
         panel.add(passwordField, gbc);
-
         gbc.gridx = 0; gbc.gridy++;
         panel.add(new JLabel("Address:"), gbc);
         gbc.gridx = 1;
         addressField = new JTextField(15);
         panel.add(addressField, gbc);
-
         gbc.gridx = 0; gbc.gridy++;
         submitButton = new JButton("Submit");
         panel.add(submitButton, gbc);
-
         gbc.gridx = 1;
         messageLabel = new JLabel("", SwingConstants.CENTER);
         messageLabel.setForeground(Color.RED);
         panel.add(messageLabel, gbc);
-
         add(panel);
-
         submitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -90,26 +87,26 @@ public class UserForm extends JFrame {
             String email = emailField.getText().trim();
             String dob = dobField.getText().trim();
             char sex = sexComboBox.getSelectedItem().toString().charAt(0);
-            String phone = phoneField.getText().trim();
+            String phonenumber = phoneField.getText().trim();
             String password = new String(passwordField.getPassword()).trim();
             String address = addressField.getText().trim();
-
-            CheckEmptyStringException.checkEmptyString(name);
-            CheckEmptyStringException.checkEmailException(email);
-            CheckEmptyStringException.checkDobException(dob);
-            CheckEmptyStringException.checkSexException(sex);
-
+            String[] inputStrings = {name,password,phonenumber,dob,email};
+            new CheckEmptyStringException(inputStrings);
+            new CheckEmptyStringException(name,"[a-zA-Z]+");
+            new NumberOnlyException(phonenumber,"[0-9]+");
+            CheckEmptyStringException.Checkemailexception(email);
+            CheckEmptyStringException.Checkdobexception(dob);
+            CheckEmptyStringException.Checksexexception(sex);
+            User user = new User();
             Address userAddress = new Address(address, "Anytown", "CA", "12345", "abc", "hi");
-            User newUser = new User(name, password, phone, sex, dob, email, userAddress);
-
-            // Save the new user to a file
-            newUser.writeToFile();
-
+            user.signup(name, password, phonenumber, sex, dob, email, userAddress);
             messageLabel.setText("Submission successful!");
             messageLabel.setForeground(Color.GREEN);
         } catch (CheckEmptyStringException ex) {
             messageLabel.setText(ex.getMessage());
             messageLabel.setForeground(Color.RED);
+        }catch(NumberOnlyException e){
+            System.out.println(e.getMessage());
         }
     }
 

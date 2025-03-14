@@ -1,3 +1,4 @@
+package models;
 public class Address {
     private String provinceMunicipality;
     private String district;

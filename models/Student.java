@@ -1,3 +1,4 @@
+package models;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList; 
@@ -7,6 +8,11 @@ public class Student extends User {
     private List<Course> courses;
     private List<StudentAttendance> attendance;
     private static int totalStudents = 1;
+    private int group;
+    private String Department;
+    private int term;
+    private double Schoolfee;
+
 
     // Constructor for registration
     public Student(User s) {
@@ -43,10 +49,19 @@ public class Student extends User {
     public int getId() { return id; }
     public List<Course> getCourses() { return courses; }    
     public List<StudentAttendance> getAttendance() { return attendance; }
+    public int getgroup(){return group;}
+    public String getDepartment(){return Department;}
+    public int getTerm(){return term;}
+    public double getSchoolfee(){return Schoolfee;}
 
     // Setters (Allow modifying values)
     public void setCourse(List<Course> courses) { this.courses = courses; } 
     public void setAttendance(List<StudentAttendance> attendance) { this.attendance = attendance; }
+    public void setGroup(int group){this.group=group;}
+    public void setDepartment(String Department){this.Department=Department;}
+    public void setTerm(int term){this.term=term;}
+    public void setSchoolfee(double Schoolfee){this.Schoolfee=Schoolfee;}
+    
     @Override
     public String toString() {
         return super.toString() + "Student{" +

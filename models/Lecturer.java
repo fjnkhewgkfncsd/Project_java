@@ -1,3 +1,4 @@
+package models;
 import java.util.ArrayList;
 
 public class Lecturer extends User {
@@ -61,23 +62,11 @@ public class Lecturer extends User {
 
 
     public void submitAttendance(String username, String password) {
-        try {
-            if (login(username, password)) {
-                System.out.println("Attendance submitted successfully.");
-            }
-        } catch (LoginFailedException e) {
-            System.out.println(e.getMessage());
-        }
+        
     }
 
     public void checkAttendance(String username, String password) {
-        try {
-            if (login(username, password)) {
-                System.out.println("Checking attendance...");
-            }
-        } catch (LoginFailedException e) {
-            System.out.println(e.getMessage());
-        }
+        
     }
     // Method to add attendance for a student
     public void addAttendance(Attendance attendanceRecord) {
