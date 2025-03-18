@@ -91,6 +91,6 @@ public class Student extends User {
     }
     public void signUp(Student student){
         StudentDAO studentDAO = new StudentDAO();
-        studentDAO.insertStudent(student);
+        studentDAO.insertStudent(student,student.getRole());
     }
 }

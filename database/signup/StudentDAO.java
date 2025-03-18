@@ -6,14 +6,14 @@ import java.sql.SQLException;
 import database.DatabaseConnection;
 
 public class StudentDAO extends UserDAO {
-    public void insertStudent(Student student) {
+    public void insertStudent(Student student,String tableName) {
         String query = "UPDATE student SET Major=?, Gen=? WHERE email=?"; // Use email as the identifier
         Connection conn = null;
         try {
             conn = DatabaseConnection.getConnection();
             conn.setAutoCommit(false); // Start transaction
             
-            super.insert(student, conn); // Insert core data (including email)
+            super.insert(student, conn,tableName); // Insert core data (including email)
             
             try (PreparedStatement stmt = conn.prepareStatement(query)) {
                 stmt.setString(1, student.getMajor());

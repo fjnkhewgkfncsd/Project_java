@@ -1,14 +1,18 @@
 package GUI;
 import javax.swing.*;
+
+import database.FetchData;
+
 import java.awt.*;
 import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.MouseEvent; // Correct import
 import models.*;
 import exceptions.*;
 
+
+
 public class UserForm extends JFrame {
-    private JTextField nameField, emailField, dobField, phoneField, 
-                      majorField, genField, positionField, specializationField;
+    private JTextField nameField, emailField, dobField, phoneField,majorField, genField, positionField, specializationField;
     private JPasswordField passwordField;
     private JComboBox<String> sexComboBox, roleComboBox;
     private JButton submitButton;
@@ -20,115 +24,128 @@ public class UserForm extends JFrame {
         setSize(600, 650);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-        setLayout(new BorderLayout());
 
-        // Main Panel Setup
-        JPanel mainPanel = new JPanel(new GridBagLayout());
+        JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(8, 10, 8, 10);
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.insets = new Insets(5, 5, 5, 5);
         gbc.anchor = GridBagConstraints.WEST;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        // Add Components to Main Panel
-        addFormRow(mainPanel, gbc, "Role:", roleComboBox = new JComboBox<>(new String[]{"Student", "Staff", "Lecturer"}));
-        addFormRow(mainPanel, gbc, "Name:", nameField = new JTextField(20));
-        addFormRow(mainPanel, gbc, "Email:", emailField = new JTextField(20));
-        addFormRow(mainPanel, gbc, "Date of Birth (YYYY-MM-DD):", dobField = new JTextField(20));
-        addFormRow(mainPanel, gbc, "Sex:", sexComboBox = new JComboBox<>(new String[]{"M", "F"}));
-        addFormRow(mainPanel, gbc, "Phone:", phoneField = new JTextField(20));
-        addFormRow(mainPanel, gbc, "Password:", passwordField = new JPasswordField(20));
+        panel.add(new JLabel("Role:"), gbc);
+        gbc.gridx = 1;
+        roleComboBox = new JComboBox<>(new String[]{"Student", "Staff", "Lecturer"});
+        panel.add(roleComboBox, gbc);
+        gbc.gridx = 0; gbc.gridy++;
 
-        // Extra Fields Panel
-        gbc.gridwidth = 2;
+        panel.add(new JLabel("Name:"), gbc);
+        gbc.gridx = 1;
+        nameField = new JTextField(15);
+        panel.add(nameField, gbc);
+
+        gbc.gridx = 0; gbc.gridy++;
+        panel.add(new JLabel("Email:"), gbc);
+        gbc.gridx = 1;
+        emailField = new JTextField(15);
+        panel.add(emailField, gbc);
+
+        gbc.gridx = 0; gbc.gridy++;
+        panel.add(new JLabel("Date of Birth (YYYY-MM-DD):"), gbc);
+        gbc.gridx = 1;
+        dobField = new JTextField(15);
+        panel.add(dobField, gbc);
+
+        gbc.gridx = 0; gbc.gridy++;
+        panel.add(new JLabel("Sex:"), gbc);
+        gbc.gridx = 1;
+        sexComboBox = new JComboBox<>(new String[]{"M", "F"});
+        panel.add(sexComboBox, gbc);
+
+        gbc.gridx = 0; gbc.gridy++;
+        panel.add(new JLabel("Phone:"), gbc);
+        gbc.gridx = 1;
+        phoneField = new JTextField(15);
+        panel.add(phoneField, gbc);
+
+        gbc.gridx = 0; gbc.gridy++;
+        panel.add(new JLabel("Password:"), gbc);
+        gbc.gridx = 1;
+        passwordField = new JPasswordField(15);
+        panel.add(passwordField, gbc);
+
         extraFieldsPanel = new JPanel(new GridBagLayout());
-        mainPanel.add(extraFieldsPanel, gbc);
-        gbc.gridwidth = 1;
+        gbc.gridx = 0; gbc.gridy++;
+        panel.add(extraFieldsPanel, gbc);
 
-        // Submit Button Panel
-        JPanel buttonPanel = new JPanel();
+        roleComboBox.addActionListener(e -> updateFields());
+        
+        gbc.gridy++;
         submitButton = new JButton("Submit");
-        buttonPanel.add(submitButton);
-
-        // Message Label
-        messageLabel = new JLabel(" ", SwingConstants.CENTER);
+        panel.add(submitButton, gbc);
+        
+        gbc.gridx = 1;
+        messageLabel = new JLabel("", SwingConstants.CENTER);
         messageLabel.setForeground(Color.RED);
+        panel.add(messageLabel, gbc);
 
-        // Container for Main Content
-        JPanel container = new JPanel(new BorderLayout());
-        container.add(mainPanel, BorderLayout.NORTH);
-        container.add(buttonPanel, BorderLayout.CENTER);
-        container.add(messageLabel, BorderLayout.SOUTH);
+        add(panel);
+        updateFields();
+        submitButton.addActionListener(e -> handleSubmit());
 
-        // Registration Link
-        JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JPanel bottomPanel = new JPanel(new GridBagLayout()); // Use GridBagLayout
+        GridBagConstraints gbcBottom = new GridBagConstraints();
+        gbcBottom.insets = new Insets(10, 0, 10, 0); // Add padding
+        gbcBottom.gridx = 0;
+        gbcBottom.gridy = 0;
+
         JLabel registerLabel = new JLabel("Not a user? Register Here");
         registerLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        registerLabel.setForeground(Color.BLUE);
         registerLabel.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
+            public void mouseClicked(java.awt.event.MouseEvent e) {
                 dispose();
                 new LoginFormGUI().setVisible(true);
             }
         });
-        bottomPanel.add(registerLabel);
-
-        // Add Components to Frame
-        add(container, BorderLayout.CENTER);
+    
+        bottomPanel.add(registerLabel, gbcBottom);
         add(bottomPanel, BorderLayout.SOUTH);
-
-        // Event Listeners
-        roleComboBox.addActionListener(e -> updateFields());
-        submitButton.addActionListener(e -> handleSubmit());
-
-        updateFields();
     }
 
-    // Helper method to add form rows
-    private void addFormRow(JPanel panel, GridBagConstraints gbc, String labelText, JComponent component) {
-        gbc.gridx = 0;
-        gbc.gridy++;
-        gbc.weightx = 0;
-        panel.add(new JLabel(labelText), gbc);
-
-        gbc.gridx = 1;
-        gbc.weightx = 1;
-        panel.add(component, gbc);
-    }
-
-    // Update dynamic fields based on role
     private void updateFields() {
         extraFieldsPanel.removeAll();
         GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
         gbc.insets = new Insets(5, 5, 5, 5);
         gbc.anchor = GridBagConstraints.WEST;
-
+        
         String role = (String) roleComboBox.getSelectedItem();
         if ("Student".equals(role)) {
-            addExtraField("Major:", majorField = new JTextField(15));
-            addExtraField("Gen:", genField = new JTextField(15));
+            extraFieldsPanel.add(new JLabel("Major:"), gbc);
+            gbc.gridx = 1;
+            majorField = new JTextField(15);
+            extraFieldsPanel.add(majorField, gbc);
+            gbc.gridx = 0; gbc.gridy++;
+            extraFieldsPanel.add(new JLabel("Gen:"), gbc);
+            gbc.gridx = 1;
+            genField = new JTextField(15);
+            extraFieldsPanel.add(genField, gbc);
         } else if ("Staff".equals(role)) {
-            addExtraField("Position:", positionField = new JTextField(15));
+            extraFieldsPanel.add(new JLabel("Position:"), gbc);
+            gbc.gridx = 1;
+            positionField = new JTextField(15);
+            extraFieldsPanel.add(positionField, gbc);
         } else if ("Lecturer".equals(role)) {
-            addExtraField("Specialization:", specializationField = new JTextField(15));
+            extraFieldsPanel.add(new JLabel("Specialization:"), gbc);
+            gbc.gridx = 1;
+            specializationField = new JTextField(15);
+            extraFieldsPanel.add(specializationField, gbc);
         }
         extraFieldsPanel.revalidate();
         extraFieldsPanel.repaint();
     }
 
-    // Helper method for extra fields
-    private void addExtraField(String labelText, JTextField textField) {
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridx = 0;
-        gbc.gridy++;
-        gbc.anchor = GridBagConstraints.WEST;
-        extraFieldsPanel.add(new JLabel(labelText), gbc);
 
-        gbc.gridx = 1;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        extraFieldsPanel.add(textField, gbc);
-    }
-
-    // Handle form submission
     private void handleSubmit() {
         try {
             String role = roleComboBox.getSelectedItem().toString().trim();
@@ -159,6 +176,7 @@ public class UserForm extends JFrame {
             CheckEmptyStringException.Checksexexception(sex);
             CheckEmptyStringException.Isemailtaken(email);
             User user = new User(name,email,phonenumber,password,dob,sex,role);
+            FetchData.InsertUser(user);
             if(role.equals("Student")){
                 String major = majorField.getText().trim();
                 String gen = genField.getText().trim();
