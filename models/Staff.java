@@ -11,12 +11,10 @@ public class Staff extends User{
     static int totalStaffCount = 0;
     static ArrayList<Staff> staffList = new ArrayList<>();
 
-    public Staff(User s, String position, String hireDate, double salary) {
+    public Staff(User s, String position) {
         super(s.name, s.email, s.phoneNumber, s.password, s.dob, s.gender,s.role);
         this.staffId = totalStaffCount++;
         this.position = position;
-        this.hireDate = hireDate;
-        this.salary = salary;
         staffList.add(this);
         attendanceList = new ArrayList<>();
     }

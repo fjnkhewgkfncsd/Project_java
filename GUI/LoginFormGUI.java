@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import database.*;
+import models.*;
 
 public class LoginFormGUI extends JFrame {
     public LoginFormGUI() {
@@ -60,10 +61,13 @@ public class LoginFormGUI extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 String email = usernameField.getText();
                 String password = new String(passwordField.getPassword());
-
-                if (FetchData.validateLogin(email, password)) {
+                User userfetch = FetchData.validateLogin(email, password);
+                if (userfetch!=null) {
+                    User Userdata = FetchData.fetchUser(userfetch,email,userfetch.getRole());
+                    System.out.println(Userdata.getRole());
                     JOptionPane.showMessageDialog(LoginFormGUI.this, "Login Successful!");
-                } else {
+                    atferLogin.atferLoginFormGUI(Userdata);
+                }else{
                     JOptionPane.showMessageDialog(LoginFormGUI.this, "Login Failed. Please try again.");
                 }
             }

@@ -13,7 +13,7 @@ public class Student_main_GUI {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new Student_main_GUI());
     }
-    Student_main_GUI() {
+    public Student_main_GUI() {
         JFrame frame = new JFrame("Student Main GUI");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -36,7 +36,4 @@ public class Student_main_GUI {
         frame.add(MainPanel);
         frame.setVisible(true);
     }
-
-
-
 }

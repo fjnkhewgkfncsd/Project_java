@@ -29,22 +29,33 @@ public class FetchData {
         return false;  // Email is available
 }
 
-    public static boolean validateLogin(String email, String password) {
+    public static User validateLogin(String email, String password) {
         Connection conn = DatabaseConnection.getConnection();
         if (conn == null) {
             System.out.println("❌ Failed to connect to the database.");
-            return false;
+            return null;
         }
-        String sql = "SELECT * FROM student WHERE email = ? AND password = ?";
+        String sql = "SELECT * FROM user WHERE email = ? AND password = ?";
         try(PreparedStatement statement = conn.prepareStatement(sql)){
             statement.setString(1, email);
             statement.setString(2, password);
             ResultSet resultSet = statement.executeQuery();
-            return resultSet.next(); // Returns true if a matching user is found
+            if (resultSet.next()) {
+                // Create and return the User object
+                return new User(
+                    resultSet.getString("name"),
+                    resultSet.getString("email"),
+                    resultSet.getString("phone_number"),
+                    resultSet.getString("password"),
+                    resultSet.getString("dob"),
+                    resultSet.getString("sex").charAt(0),
+                    resultSet.getString("role")
+                );
+            } // Returns true if a matching user is found
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return false; // Login failed
+        return null; // Login failed
     }
     public static void InsertUser(User user){
         Connection conn = DatabaseConnection.getConnection();
@@ -54,5 +65,35 @@ public class FetchData {
         }
         UserDAO.insert(user,conn,"user");
         DatabaseConnection.closeConnection();
+    }
+    public static User fetchUser(User user,String email,String role) {
+        Connection conn = DatabaseConnection.getConnection();
+        if(conn==null){
+            System.out.println("❌ Failed to connect to the database.");
+            return null;
+        }
+        String sql = "SELECT * FROM " + role + " WHERE email = ?";
+        try(PreparedStatement statement = conn.prepareStatement(sql)){
+            statement.setString(1, email);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                if(role.equals("Student")){
+                    return new Student(
+                    user,
+                    resultSet.getString("major"),
+                    resultSet.getInt("gen"));
+                }else if(role.equals("Staff")){
+                    return new Staff(user,
+                    resultSet.getString("position"));
+                }else{
+                    return new Lecturer(user,
+                    resultSet.getString("specialization")); 
+                }
+            } 
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return null;
     }
 }

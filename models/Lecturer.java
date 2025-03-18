@@ -9,7 +9,7 @@ public class Lecturer extends User {
     private ArrayList<Attendance> attendance;  
     private static ArrayList<Lecturer> lecturerList = new ArrayList<Lecturer>();
 
-    public Lecturer(User s, String specialization, double salary) {
+    public Lecturer(User s, String specialization) {
         super(s.name, s.email, s.password, s.password, s.dob, s.gender,s.role);
         this.id = totalLecturers++;
         this.specialization = specialization;
