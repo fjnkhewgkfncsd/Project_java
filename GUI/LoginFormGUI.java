@@ -61,10 +61,10 @@ public class LoginFormGUI extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 String email = usernameField.getText();
                 String password = new String(passwordField.getPassword());
-                User userfetch = FetchData.validateLogin(email, password);
+                User user = new User();
+                User userfetch = user.login(email, password);
                 if (userfetch!=null) {
                     User Userdata = FetchData.fetchUser(userfetch,email,userfetch.getRole());
-                    System.out.println(Userdata.getRole());
                     JOptionPane.showMessageDialog(LoginFormGUI.this, "Login Successful!");
                     atferLogin.atferLoginFormGUI(Userdata);
                 }else{

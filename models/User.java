@@ -1,6 +1,8 @@
 package models;
 import java.util.ArrayList;
 import java.util.List;
+
+import database.FetchData;
 import exceptions.*;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -32,16 +34,18 @@ public class User implements Manage {
         allUsers.add(this);
     }
     @Override
-    public boolean login(String email, String password){
+    public User login(String email, String password){
+        User result;
         try{
             String[] inputStrings = {email,password};
             new CheckEmptyStringException(inputStrings);
+            result = FetchData.validateLogin(email, password);
         }catch(CheckEmptyStringException e){
             System.out.println(e.getMessage());
-            return false;
+            return null;
         }
-        System.out.println("✅ Login successful for: " + name);
-        return true;
+        System.out.println("✅ Login successful for: " + result.getName());
+        return result;
     }
     @Override
     public String toString(){   
