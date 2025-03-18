@@ -96,13 +96,4 @@ public class FetchData {
         }
         return null;
     }
-    public static void InsertUser(User user){
-        Connection conn = DatabaseConnection.getConnection();
-        if(conn==null){
-            System.out.println("❌ Failed to connect to the database.");
-            return;
-        }
-        UserDAO.insert(user,conn,"user");
-        DatabaseConnection.closeConnection();
-    }
 }
