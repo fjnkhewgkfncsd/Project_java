@@ -1,4 +1,5 @@
 package exceptions;
+import database.FetchData;
 
 public class CheckEmptyStringException extends IllegalArgumentException {
 
@@ -37,5 +38,10 @@ public class CheckEmptyStringException extends IllegalArgumentException {
         {
             throw new CheckEmptyStringException("You could only choose M or F");    
         }
-    }   
+    }  
+    public static void Isemailtaken(String Email) throws CheckEmptyStringException {
+        if(FetchData.isEmailTaken(Email)){
+            throw new CheckEmptyStringException("Email is already taken");
+        };
+    } 
 }

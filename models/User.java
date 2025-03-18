@@ -15,43 +15,21 @@ public class User implements Manage {
     protected String password;
     protected String dob;
     protected char gender;
-    protected Address address;
+    protected String role;
     static int totalUsers = 0;
     protected static List<User> allUsers = new ArrayList<>(); // List to store all users
-
     public User() {
     }
-    protected User(String name, String email, String phoneNumber, String password, String dob, char gender,Address address) {
+    public User(String name, String email, String phoneNumber, String password, String dob, char gender,String role) {
         this.name = name;
-        this.address = address;
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.password = password;
         this.dob = dob;
         this.gender = gender;
-        this.address = address;
+        this.role = role;
         totalUsers++;
-    }
-    @Override
-    public User signup(String name,String password,String phonenumber,char sex,String dob,String email,Address address) {
-        String[] inputStrings = {name,password,phonenumber,dob,email};
-        try{
-            new CheckEmptyStringException(inputStrings);
-            new CheckEmptyStringException(name,"[a-zA-Z]+");
-            new NumberOnlyException(phonenumber,"[0-9]+");
-            CheckEmptyStringException.Checkemailexception(email);
-            CheckEmptyStringException.Checkdobexception(dob);
-            CheckEmptyStringException.Checksexexception(sex);
-        }catch(CheckEmptyStringException e){
-            System.out.println(e.getMessage());
-            return null;
-        }catch(NumberOnlyException e){
-            System.out.println(e.getMessage());
-            return null;
-        }
-        User user = new User(name,email,phonenumber,password,dob,sex,address);
-        allUsers.add(user);
-        return user;
+        allUsers.add(this);
     }
     @Override
     public boolean login(String email, String password){
@@ -72,8 +50,7 @@ public class User implements Manage {
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", password='" + password + '\'' +
                 ", dob='" + dob + '\'' +
-                ", gender=" + gender +
-                ", address=" + address;
+                ", gender=" + gender ;
     }
     
     //getters 
@@ -95,8 +72,8 @@ public class User implements Manage {
     public char getGender() {
         return gender;
     }
-    public Address getAddress() {
-        return address;
+    public String getRole() {
+        return role;
     }
     //setters
     public void setName(String name) {
@@ -117,8 +94,8 @@ public class User implements Manage {
     public void setGender(char gender) {
         this.gender = gender;
     }
-    public void setAddress(Address address) {
-        this.address = address;
+    public void setRole(String role) {
+        this.role = role;
     }
     //write file
     void writeToFile() {

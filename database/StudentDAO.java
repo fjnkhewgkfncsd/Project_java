@@ -3,7 +3,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class StudentDAO {
+public class studentDAO {
     public void addStudent(String name, String email, String phone, String password, String dob, String gender, String address) {
         Connection conn = DatabaseConnection.getConnection();
         if (conn == null) return; // Stop execution if connection fails

@@ -1,8 +1,6 @@
 package models;
 import java.util.ArrayList;
 import java.util.List;
-import java.time.LocalDate;
-import java.time.LocalTime;
 public class Staff extends User{
     protected int staffId;
     String position;
@@ -14,7 +12,7 @@ public class Staff extends User{
     static ArrayList<Staff> staffList = new ArrayList<>();
 
     public Staff(User s, String position, String hireDate, double salary) {
-        super(s.name, s.email, s.phoneNumber, s.password, s.dob, s.gender, s.address);
+        super(s.name, s.email, s.phoneNumber, s.password, s.dob, s.gender,s.role);
         this.staffId = totalStaffCount++;
         this.position = position;
         this.hireDate = hireDate;
