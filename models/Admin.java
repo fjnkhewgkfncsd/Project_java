@@ -1,5 +1,5 @@
 package models;
-import exceptions.*;
+
 public class Admin implements Manage{
 import java.util.List;
 
@@ -8,24 +8,24 @@ public class Admin implements Manage {
     String email;
     int phoneNumber;
     private String password;
-    // For signup
+
     public Admin(String username, String email, int phoneNumber, String password) {
         this.username = username;
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.password = password;
     }
-    //For Login
+
     public Admin(String email, String password) {
         this.email = email;
         this.password = password;
     }
 
-    public boolean login(String email, String password){
-        try{
-            String[] inputStrings = {email,password};
-            new CheckEmptyStringException(inputStrings);
-        }catch(CheckEmptyStringException e){
+    // Login method to validate email and password
+    public boolean login(String email, String password) {
+        return this.email.equals(email) && this.password.equals(password);
+    }
+
             System.out.println(e.getMessage());
             return false;
         }
