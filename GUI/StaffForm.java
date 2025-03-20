@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import models.Staff;
+import models.*;
 
 public class StaffForm extends JFrame {
     private JButton submitAttendanceButton, viewAttendanceButton;
@@ -54,6 +54,7 @@ public class StaffForm extends JFrame {
     }
 
     public static void main(String[] args) {
-        // SwingUtilities.invokeLater(() -> new StaffForm().setVisible(true));
+        Staff staff = new Staff(new User("John Doe", "john.doe@example.com", "123456789", "password", "1990-01-01", 'M', "Staff"), "Manager");
+        SwingUtilities.invokeLater(() -> new StaffForm(staff).setVisible(true));
     }
 }

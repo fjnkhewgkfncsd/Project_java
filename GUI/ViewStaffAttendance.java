@@ -4,17 +4,20 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import models.*;
 
 public class ViewStaffAttendance extends JFrame {
     private JTextField staffIdField;
-    private JButton viewButton, backButton;
+    private JButton viewButton, clearButton; // Add clearButton
     private JTextArea attendanceArea;
+    private StaffForm staffForm;
 
     public ViewStaffAttendance() {
         setTitle("View Staff Attendance");
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
+        this.staffForm = staffForm;
 
         JPanel panel = new JPanel(new GridBagLayout());
         panel.setBackground(new Color(250, 250, 250));
@@ -40,10 +43,10 @@ public class ViewStaffAttendance extends JFrame {
         buttonPanel.setBackground(new Color(250, 250, 250));
 
         viewButton = new StyledButton("View");
-        backButton = new StyledButton("Back");
+        clearButton = new StyledButton("Clear"); // Initialize clearButton
 
         buttonPanel.add(viewButton);
-        buttonPanel.add(backButton);
+        buttonPanel.add(clearButton); // Add clearButton to buttonPanel
 
         gbc.gridx = 0;
         gbc.gridy = 1;
@@ -79,22 +82,27 @@ public class ViewStaffAttendance extends JFrame {
             }
         });
 
-        backButton.addActionListener(new ActionListener() {
+        clearButton.addActionListener(new ActionListener() { // Add action for clearButton
             @Override
             public void actionPerformed(ActionEvent e) {
-                new StaffForm().setVisible(true);
-                dispose(); // Close current window
+                staffIdField.setText(""); // Clear the input field
+                attendanceArea.setText(""); // Clear the attendance area
             }
         });
     }
 
     private String getAttendanceRecords(String staffId) {
-        return "Attendance records for Staff ID: " + staffId + "\n" +
-               "Date: 2025-03-01 - Present\n" +
-               "Date: 2025-03-02 - Absent\n" +
-               "Date: 2025-03-03 - Present\n" +
-               "Date: 2025-03-04 - Present\n" +
-               "Date: 2025-03-05 - Absent\n";
+        try {
+            int id = Integer.parseInt(staffId);
+            for (Staff staff : Staff.getStaffList()) {
+                if (staff.getId() == id) {
+                    return staff.getFormattedAttendanceRecords();
+                }
+            }
+            return "No staff found with ID: " + staffId;
+        } catch (NumberFormatException e) {
+            return "Invalid Staff ID. Please enter a numeric value.";
+        }
     }
 
     public static void main(String[] args) {

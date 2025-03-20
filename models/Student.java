@@ -3,7 +3,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList; 
 import java.util.List;
-import database.signup.*;
+import database.signup.StudentDAO;
 public class Student extends User {
     private int id;
     private List<Course> courses;
@@ -16,6 +16,8 @@ public class Student extends User {
     private String Major;
     private int Gen;
 
+    private static ArrayList<Student> studentList = new ArrayList<>();
+
     // Constructor for registration
     public Student(User s,String major,int gen) {
         super(s.name, s.email, s.phoneNumber, s.password, s.dob, s.gender,s.role);
@@ -26,6 +28,7 @@ public class Student extends User {
         Major = major;
         Gen = gen;
         allUsers.add(this);
+        studentList.add(this);
     }
 
     public void submitAttendance(String courseId, String status, String remarks) {
@@ -72,6 +75,27 @@ public class Student extends User {
     public void setSchoolfee(double Schoolfee){this.Schoolfee=Schoolfee;}
     public void setMajor(String Major){this.Major=Major;}
     public void setGen(int Gen){this.Gen=Gen;}
+
+    public static Student getStudentById(String studentId) {
+        for (Student student : studentList) {
+            if (student.getId() == Integer.parseInt(studentId)) {
+                return student;
+            }
+        }
+        return null;
+    }
+
+    public void assignCourse(Course course, String group, String classroom, String year, String generation, String department, String schoolFee) {
+        if (!courses.contains(course)) {
+            courses.add(course);
+            this.group = Integer.parseInt(group);
+            this.classroom = classroom;
+            this.term = Integer.parseInt(year);
+            this.Gen = Integer.parseInt(generation);
+            this.department = new Department(department); // Assuming Department has a constructor that accepts a String
+            this.Schoolfee = Double.parseDouble(schoolFee);
+        }
+    }
 
     @Override
     public String toString() {
