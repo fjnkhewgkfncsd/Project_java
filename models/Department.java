@@ -20,6 +20,15 @@ public class Department {
                 ", HOD='" + HOD + '\'' +
                 '}';
     }
+    public String getName() {
+        return name;
+    }
+    public String getId() {
+        return Department_id;
+    }
+    public String getHOD() {
+        return HOD;
+    }
     //equals
     @Override
     public boolean equals(Object obj) {

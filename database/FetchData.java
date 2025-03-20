@@ -101,7 +101,6 @@ public class FetchData {
             System.out.println("❌ Failed to connect to the database.");
             return null;
         }
-
         String sql = "SELECT * FROM StudentAttendance WHERE course_id = ? AND Student_id = ?";
         List<StudentAttendance> attendances = new ArrayList<>();
 
@@ -123,14 +122,5 @@ public class FetchData {
             return null;
         }
         return attendances;
-    }
-    public static void insertCourse(){
-        Connection conn = DatabaseConnection.getConnection();
-        if(conn==null){
-            System.out.println("❌ Failed to connect to the database.");
-            return;
-        }
-        CourseDAO.insertCourse(conn);
-        DatabaseConnection.closeConnection();
     }
 }
