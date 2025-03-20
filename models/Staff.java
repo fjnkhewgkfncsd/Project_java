@@ -1,7 +1,12 @@
 package models;
 import java.util.ArrayList;
 import java.util.List;
-public class Staff extends User{
+
+import database.signup.StaffDAO;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
+public class Staff extends User {
     protected int staffId;
     String position;
     String hireDate;
@@ -20,7 +25,7 @@ public class Staff extends User{
     }
     
     //getters
-    public int getStaffId() { 
+    public int getId() { 
         return staffId;
     }
     public String getPosition() {
@@ -95,5 +100,10 @@ public class Staff extends User{
         } catch (Exception e) {
             System.out.println("❌ Failed to check attendance: " + e.getMessage());
         }
+    }
+
+    public void signUp(Staff staff){
+        StaffDAO staffDAO = new StaffDAO();
+        staffDAO.insertStaff(staff,staff.getRole());
     }
 }

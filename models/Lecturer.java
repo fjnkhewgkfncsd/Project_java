@@ -1,6 +1,9 @@
 package models;
 import java.util.ArrayList;
 
+import database.signup.LecturerDAO;
+import models.User;
+
 public class Lecturer extends User {
     private static int totalLecturers = 0  ;  // Static variable to track total number of lecturers
     private int id;
@@ -114,5 +117,10 @@ public class Lecturer extends User {
         }
         Lecturer l = (Lecturer) obj;
         return l.id==this.id;
+    }
+
+    public void signUp(Lecturer lecturer){
+        LecturerDAO lecturerDAO = new LecturerDAO();
+        lecturerDAO.insertLecturer(lecturer,lecturer.getRole());
     }
 }
