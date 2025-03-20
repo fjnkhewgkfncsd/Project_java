@@ -185,12 +185,12 @@ public class UserForm extends JFrame {
                 student.signUp(student); 
             }else if(role.equals("staff")){
                 String position = positionField.getText().trim();
-                // Staff staff = new Staff(user,position);
-                // staff.signUp();
+                Staff staff = new Staff(user,position);
+                staff.signUp(staff);
             }else{
                 String specialization = specializationField.getText().trim();
-                // Lecturer lecturer = new Lecturer(user,specialization);
-                // lecturer.signUp();
+                Lecturer lecturer = new Lecturer(user,specialization);
+                lecturer.signUp(lecturer);
             }
             messageLabel.setText("Submission successful!");
             messageLabel.setForeground(Color.GREEN);
