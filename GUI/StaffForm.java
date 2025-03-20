@@ -4,11 +4,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import models.Staff;
 
 public class StaffForm extends JFrame {
     private JButton submitAttendanceButton, viewAttendanceButton;
 
-    public StaffForm() {
+    public StaffForm(Staff staff) {
         setTitle("Staff Dashboard");
         setExtendedState(JFrame.MAXIMIZED_BOTH); // Make the form full screen
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -53,6 +54,6 @@ public class StaffForm extends JFrame {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new StaffForm().setVisible(true));
+        // SwingUtilities.invokeLater(() -> new StaffForm().setVisible(true));
     }
 }

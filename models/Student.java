@@ -59,6 +59,9 @@ public class Student extends User {
     public double getSchoolfee(){return Schoolfee;}
     public String getMajor(){return Major;}
     public int getGen(){return Gen;}
+    public void addAttendance(StudentAttendance attendance) {
+        this.attendance.add(attendance);
+    }
 
     // Setters (Allow modifying values)
     public void setCourse(List<Course> courses) { this.courses = courses; } 

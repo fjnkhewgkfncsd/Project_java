@@ -1,11 +1,10 @@
 package database;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import database.signup.UserDAO;
 import models.*;
 
@@ -95,5 +94,43 @@ public class FetchData {
             return null;
         }
         return null;
+    }
+    public static List<StudentAttendance> fetchAllStudentAttendances(String course_id, int student_id) {
+        Connection conn = DatabaseConnection.getConnection();
+        if (conn == null) {
+            System.out.println("❌ Failed to connect to the database.");
+            return null;
+        }
+
+        String sql = "SELECT * FROM StudentAttendance WHERE course_id = ? AND Student_id = ?";
+        List<StudentAttendance> attendances = new ArrayList<>();
+
+        try (PreparedStatement statement = conn.prepareStatement(sql)) {
+            statement.setString(1, course_id);
+            statement.setInt(2, student_id);
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                StudentAttendance attendance = new StudentAttendance(
+                    resultSet.getInt("person_id"),
+                    resultSet.getString("status"),
+                    resultSet.getString("remarks"),
+                    resultSet.getString("course_id"));
+                attendances.add(attendance);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return attendances;
+    }
+    public static void insertCourse(){
+        Connection conn = DatabaseConnection.getConnection();
+        if(conn==null){
+            System.out.println("❌ Failed to connect to the database.");
+            return;
+        }
+        CourseDAO.insertCourse(conn);
+        DatabaseConnection.closeConnection();
     }
 }

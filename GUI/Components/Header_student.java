@@ -27,16 +27,5 @@ public class Header_student extends JPanel {
         add(helloLabel);
         add(courseLabel);
     }
-    public static void main(String[] args) {
-        // JFrame frame = new JFrame();
-        // frame.setSize(500, 300);
-        // frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        // Header_student header = new Header_student("Mengly", 15, "Software Engineering");
-        // frame.add(header);
-
-        // frame.setVisible(true);
-            
-        }
 }
 

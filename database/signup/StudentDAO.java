@@ -12,9 +12,7 @@ public class StudentDAO extends UserDAO {
         try {
             conn = DatabaseConnection.getConnection();
             conn.setAutoCommit(false); // Start transaction
-            
             super.insert(student, conn,tableName); // Insert core data (including email)
-            
             try (PreparedStatement stmt = conn.prepareStatement(query)) {
                 stmt.setString(1, student.getMajor());
                 stmt.setInt(2, student.getGen());
@@ -35,6 +33,15 @@ public class StudentDAO extends UserDAO {
         } finally {
             DatabaseConnection.closeConnection();
         }
+    }
+    public static void insertCourse(){
+        Connection conn = DatabaseConnection.getConnection();
+        if(conn==null){
+            System.out.println("❌ Failed to connect to the database.");
+            return;
+        }
+        String query = "UPDATE Student Set "
+        DatabaseConnection.closeConnection();
     }
 }
 

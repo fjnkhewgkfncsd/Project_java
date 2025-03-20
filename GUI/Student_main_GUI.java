@@ -1,19 +1,16 @@
 package GUI;
 import javax.swing.*;
-
+import java.util.List;
 import GUI.Components.Header_student;
 import GUI.Components.CourseButton;
-import models.Student;
+import models.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 
 public class Student_main_GUI {
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new Student_main_GUI());
-    }
-    public Student_main_GUI() {
+    public Student_main_GUI(Student student) {
         JFrame frame = new JFrame("Student Main GUI");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -22,17 +19,22 @@ public class Student_main_GUI {
         JPanel MainPanel = new JPanel(new BorderLayout());
         MainPanel.setBorder(BorderFactory.createEmptyBorder(10, 200, 10, 200));
 
-        Header_student first = new Header_student("Heng Mengly",10,"softwere enginearing");
+        Header_student first = new Header_student(student.getName(),student.getGen(),student.getMajor());
         MainPanel.add(first,BorderLayout.NORTH);
 
         JPanel GroupCourse = new JPanel(new GridLayout(3, 2, 60, 20));
-        GroupCourse.add(new CourseButton("Math"));
-        GroupCourse.add(new CourseButton("Physics"));
-        GroupCourse.add(new CourseButton("Java"));
-        GroupCourse.add(new CourseButton("C++"));
-        GroupCourse.add(new CourseButton("Databases"));
-        MainPanel.add(GroupCourse,BorderLayout.CENTER);
-
+        if(student.getCourses().size()==0){
+            JLabel noCourse = new JLabel("No Courses Enrolled",SwingConstants.CENTER);
+            noCourse.setFont(new Font("Arial", Font.BOLD, 40));
+            MainPanel.add(noCourse,BorderLayout.CENTER);
+        }else{
+            List<Course> courseList = student.getCourses();
+            for(int i=0;i<courseList.size();i++){
+                Course course = courseList.get(i);
+                GroupCourse.add(new CourseButton(course.getCourseName(),student,course.getCourseCode()));
+            }
+            MainPanel.add(GroupCourse,BorderLayout.CENTER);
+        }
         frame.add(MainPanel);
         frame.setVisible(true);
     }
