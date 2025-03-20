@@ -5,16 +5,20 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+import GUI.Student_main_GUI;
+
 public class AttendaceDAO {
-    public static void insertStudentAttendance(StudentAttendance attendance,String tableName){
+    public static void insertStudentAttendance(Attendance attendance,String tableName){
         Connection conn = DatabaseConnection.getConnection();
         if(conn==null){
             System.out.println("❌ Failed to connect to the database.");
             return;
         }
-        String sql = "Insert into "+tableName+"_attendance (person_id,status,remark,Attendance_time,Attendance_date) values (?,?,?,?,?)";
-        if(tableName.equals("Student")){
-            sql = "insert into Student_Attendance (person_id,status,remark,Attendance_time,Attendance_date,course_id) values (?,?,?,?,?,?)";
+        String sql;
+        if (tableName.equals("Student")) {
+            sql = "INSERT INTO Student_Attendance (person_id, status, remark, Attendance_time, Attendance_date, course_id) VALUES (?, ?, ?, ?, ?, ?)";
+        } else {
+            sql = "INSERT INTO " + tableName + "_attendance (person_id, status, remark, Attendance_time, Attendance_date) VALUES (?, ?, ?, ?, ?)";
         }
         try(PreparedStatement statement = conn.prepareStatement(sql)){
             LocalTime localTime = attendance.getTime();
@@ -27,7 +31,8 @@ public class AttendaceDAO {
             statement.setTime(4, sqlTime);
             statement.setDate(5, sqlDate);
             if(tableName.equals("Student")){
-                statement.setString(6, attendance.getCourseId());
+                StudentAttendance studentAttendance = (StudentAttendance) attendance;
+                statement.setString(6, studentAttendance.getCourseId());
             }
             statement.executeUpdate();
         } catch (SQLException e) {
