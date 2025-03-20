@@ -7,7 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class ManageStudentsForm extends JFrame {
-    private JTextField idField, nameField, gradeField;
+    private JTextField idField, nameField, schoolFeeField; // Updated field declarations
     private JTable studentTable;
     private DefaultTableModel tableModel;
 
@@ -23,7 +23,7 @@ public class ManageStudentsForm extends JFrame {
         mainPanel.setBackground(new Color(240, 240, 240)); // Light gray background
 
         // Input Panel
-        JPanel inputPanel = new JPanel(new GridLayout(3, 2, 10, 10));
+        JPanel inputPanel = new JPanel(new GridLayout(3, 2, 10, 10)); // Adjusted layout for 3 rows
         inputPanel.setBorder(BorderFactory.createTitledBorder("Student Details"));
         inputPanel.setBackground(new Color(255, 255, 255)); // White background
 
@@ -35,9 +35,9 @@ public class ManageStudentsForm extends JFrame {
         nameField = new JTextField(15);
         inputPanel.add(nameField);
 
-        inputPanel.add(new JLabel("Grade:"));
-        gradeField = new JTextField(15);
-        inputPanel.add(gradeField);
+        inputPanel.add(new JLabel("School Fee:")); // Added School Fee label
+        schoolFeeField = new JTextField(15);       // Added School Fee input field
+        inputPanel.add(schoolFeeField);
 
         mainPanel.add(inputPanel, BorderLayout.NORTH);
 
@@ -88,7 +88,7 @@ public class ManageStudentsForm extends JFrame {
         tablePanel.setBorder(BorderFactory.createTitledBorder("Student Records"));
         tablePanel.setBackground(new Color(255, 255, 255)); // White background
 
-        tableModel = new DefaultTableModel(new String[]{"Student ID", "Name", "Grade"}, 0);
+        tableModel = new DefaultTableModel(new String[]{"Student ID", "Name", "School Fee"}, 0); // Updated table columns
         studentTable = new JTable(tableModel);
         studentTable.setRowHeight(25); // Increase row height for better readability
         JScrollPane scrollPane = new JScrollPane(studentTable);
@@ -113,14 +113,14 @@ public class ManageStudentsForm extends JFrame {
     private void addStudent() {
         String id = idField.getText().trim();
         String name = nameField.getText().trim();
-        String grade = gradeField.getText().trim();
+        String schoolFee = schoolFeeField.getText().trim(); // Updated variable
 
-        if (id.isEmpty() || name.isEmpty() || grade.isEmpty()) {
+        if (id.isEmpty() || name.isEmpty() || schoolFee.isEmpty()) { // Updated validation
             JOptionPane.showMessageDialog(this, "Please fill in all fields.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        tableModel.addRow(new Object[]{id, name, grade});
+        tableModel.addRow(new Object[]{id, name, schoolFee}); // Updated row data
         clearFields();
         JOptionPane.showMessageDialog(this, "Student added successfully.");
     }
@@ -134,16 +134,16 @@ public class ManageStudentsForm extends JFrame {
 
         String id = idField.getText().trim();
         String name = nameField.getText().trim();
-        String grade = gradeField.getText().trim();
+        String schoolFee = schoolFeeField.getText().trim(); // Updated variable
 
-        if (id.isEmpty() || name.isEmpty() || grade.isEmpty()) {
+        if (id.isEmpty() || name.isEmpty() || schoolFee.isEmpty()) { // Updated validation
             JOptionPane.showMessageDialog(this, "Please fill in all fields.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
         tableModel.setValueAt(id, selectedRow, 0);
         tableModel.setValueAt(name, selectedRow, 1);
-        tableModel.setValueAt(grade, selectedRow, 2);
+        tableModel.setValueAt(schoolFee, selectedRow, 2); // Updated column index
         clearFields();
         JOptionPane.showMessageDialog(this, "Student record updated successfully.");
     }
@@ -169,15 +169,15 @@ public class ManageStudentsForm extends JFrame {
 
         String id = tableModel.getValueAt(selectedRow, 0).toString();
         String name = tableModel.getValueAt(selectedRow, 1).toString();
-        String grade = tableModel.getValueAt(selectedRow, 2).toString();
+        String schoolFee = tableModel.getValueAt(selectedRow, 2).toString(); // Updated column index
 
-        JOptionPane.showMessageDialog(this, "Student Details:\nID: " + id + "\nName: " + name + "\nGrade: " + grade);
+        JOptionPane.showMessageDialog(this, "Student Details:\nID: " + id + "\nName: " + name + "\nSchool Fee: " + schoolFee); // Updated message
     }
 
     private void clearFields() {
         idField.setText("");
         nameField.setText("");
-        gradeField.setText("");
+        schoolFeeField.setText(""); // Updated field clearing
     }
 
     public static void main(String[] args) {

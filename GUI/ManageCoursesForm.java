@@ -7,8 +7,8 @@ import java.awt.event.ActionListener;
 import models.*;
 
 public class ManageCoursesForm extends JFrame {
-    private JTextField studentIdField, courseIdField, groupField, classroomField, yearField, generationField, departmentField, schoolFeeField;
-    private JLabel messageLabel;
+    private JTextField studentIdField, courseIdField, groupField, classroomField, yearField, generationField, departmentField;
+    private JTextArea infoTextArea;
 
     public ManageCoursesForm() {
         setTitle("Manage Courses");
@@ -21,7 +21,7 @@ public class ManageCoursesForm extends JFrame {
         mainPanel.setBackground(new Color(240, 240, 240));
 
         // Input Panel
-        JPanel inputPanel = new JPanel(new GridLayout(8, 2, 10, 10));
+        JPanel inputPanel = new JPanel(new GridLayout(7, 2, 10, 10));
         inputPanel.setBorder(BorderFactory.createTitledBorder("Course Assignment Details"));
         inputPanel.setBackground(new Color(255, 255, 255));
 
@@ -53,11 +53,18 @@ public class ManageCoursesForm extends JFrame {
         departmentField = new JTextField();
         inputPanel.add(departmentField);
 
-        inputPanel.add(new JLabel("School Fee:"));
-        schoolFeeField = new JTextField();
-        inputPanel.add(schoolFeeField);
-
         mainPanel.add(inputPanel, BorderLayout.NORTH);
+
+        // Info Display Panel
+        JPanel infoPanel = new JPanel(new BorderLayout());
+        infoPanel.setBorder(BorderFactory.createTitledBorder("Information"));
+        infoTextArea = new JTextArea(10, 50);
+        infoTextArea.setEditable(false);
+        infoTextArea.setFont(new Font("Arial", Font.PLAIN, 14));
+        JScrollPane scrollPane = new JScrollPane(infoTextArea);
+        infoPanel.add(scrollPane, BorderLayout.CENTER);
+
+        mainPanel.add(infoPanel, BorderLayout.CENTER);
 
         // Button Panel
         JPanel buttonPanel = new JPanel(new GridLayout(1, 2, 20, 10));
@@ -81,15 +88,7 @@ public class ManageCoursesForm extends JFrame {
         });
         buttonPanel.add(clearButton);
 
-        mainPanel.add(buttonPanel, BorderLayout.CENTER);
-
-        // Message Panel
-        JPanel messagePanel = new JPanel();
-        messagePanel.setBackground(new Color(240, 240, 240));
-        messageLabel = new JLabel("", SwingConstants.CENTER);
-        messagePanel.add(messageLabel);
-
-        mainPanel.add(messagePanel, BorderLayout.SOUTH);
+        mainPanel.add(buttonPanel, BorderLayout.SOUTH);
 
         // Add main panel to frame
         add(mainPanel);
@@ -113,10 +112,9 @@ public class ManageCoursesForm extends JFrame {
         String year = yearField.getText().trim();
         String generation = generationField.getText().trim();
         String department = departmentField.getText().trim();
-        String schoolFee = schoolFeeField.getText().trim();
 
-        if (studentId.isEmpty() || courseId.isEmpty() || group.isEmpty() || classroom.isEmpty() || year.isEmpty() || generation.isEmpty() || department.isEmpty() || schoolFee.isEmpty()) {
-            messageLabel.setText("Please fill in all fields.");
+        if (studentId.isEmpty() || courseId.isEmpty() || group.isEmpty() || classroom.isEmpty() || year.isEmpty() || generation.isEmpty() || department.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please fill in all fields.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
@@ -124,13 +122,20 @@ public class ManageCoursesForm extends JFrame {
         Course course = Course.getCourseByCode(courseId);
 
         if (student == null) {
-            messageLabel.setText("Student not found.");
+            JOptionPane.showMessageDialog(this, "Student not found.", "Error", JOptionPane.ERROR_MESSAGE);
         } else if (course == null) {
-            messageLabel.setText("Course not found.");
+            JOptionPane.showMessageDialog(this, "Course not found.", "Error", JOptionPane.ERROR_MESSAGE);
         } else {
-            // Assuming Student class has a method to assign course with additional details
-            student.assignCourse(course, group, classroom, year, generation, department, schoolFee);
-            messageLabel.setText("Course assigned successfully!");
+            // Assuming the assignCourse method exists in the Student class
+            student.assignCourse(course, group, classroom, year, generation, department);
+            JOptionPane.showMessageDialog(this, "Course assigned successfully!\n\nDetails:\n"
+                + "Student ID: " + studentId + "\n"
+                + "Course ID: " + courseId + "\n"
+                + "Group: " + group + "\n"
+                + "Classroom: " + classroom + "\n"
+                + "Year: " + year + "\n"
+                + "Generation: " + generation + "\n"
+                + "Department: " + department, "Success", JOptionPane.INFORMATION_MESSAGE);
         }
     }
 
@@ -142,7 +147,6 @@ public class ManageCoursesForm extends JFrame {
         yearField.setText("");
         generationField.setText("");
         departmentField.setText("");
-        schoolFeeField.setText("");
-        messageLabel.setText("");
+        infoTextArea.setText("");
     }
 }

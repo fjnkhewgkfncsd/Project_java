@@ -12,6 +12,7 @@ public class Student extends User {
     private int group;
     private Department department;
     private int term;
+    private String classroom;
     private double Schoolfee;
     private String Major;
     private int Gen;
@@ -85,15 +86,14 @@ public class Student extends User {
         return null;
     }
 
-    public void assignCourse(Course course, String group, String classroom, String year, String generation, String department, String schoolFee) {
+    public void assignCourse(Course course, String group, String classroom, String year, String generation, String department) {
         if (!courses.contains(course)) {
             courses.add(course);
             this.group = Integer.parseInt(group);
             this.classroom = classroom;
             this.term = Integer.parseInt(year);
             this.Gen = Integer.parseInt(generation);
-            this.department = new Department(department); // Assuming Department has a constructor that accepts a String
-            this.Schoolfee = Double.parseDouble(schoolFee);
+            this.department = Department.getDepartmentByName(department); // Assuming a static method exists to fetch Department by name
         }
     }
 
