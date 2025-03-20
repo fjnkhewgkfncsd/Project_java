@@ -1,6 +1,5 @@
 package models;
 
-public class Admin implements Manage{
 import java.util.List;
 
 public class Admin implements Manage {
@@ -26,16 +25,11 @@ public class Admin implements Manage {
         return this.email.equals(email) && this.password.equals(password);
     }
 
-            System.out.println(e.getMessage());
-            return false;
-        }
-        System.out.println("✅ Login successful for: " + username);
-        return true;
-    }
-    public User signup(String name,String password,String phonenumber,char sex,String dob,String email){
+    // Method to sign up a new user (returns null for now)
+    public User signup(String name, String password, String phoneNumber, char sex, String dob, String email) {
         return null;
     }
-    //toString 
+
             System.out.println("⚠️ Student already enrolled in this course!");
         }
     }
@@ -98,16 +92,12 @@ public class Admin implements Manage {
                 ", phoneNumber=" + phoneNumber +
                 '}';
     }
-    //equals
+
     @Override
     public boolean equals(Object obj) {
-        if (obj == this) {
-            return true;
-        }
-        if (obj == null || obj.getClass() != this.getClass()) {
-            return false;
-        }
+        if (obj == this) return true;
+        if (obj == null || obj.getClass() != this.getClass()) return false;
         Admin a = (Admin) obj;
-        return a.email == this.email;
+        return a.email.equals(this.email);
     }
 }
