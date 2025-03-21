@@ -34,14 +34,5 @@ public class StudentDAO extends UserDAO {
             DatabaseConnection.closeConnection();
         }
     }
-    public static void insertCourse(){
-        Connection conn = DatabaseConnection.getConnection();
-        if(conn==null){
-            System.out.println("❌ Failed to connect to the database.");
-            return;
-        }
-        String query = "UPDATE Student Set "
-        DatabaseConnection.closeConnection();
-    }
 }
 

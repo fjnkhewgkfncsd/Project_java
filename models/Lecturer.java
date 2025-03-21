@@ -11,7 +11,7 @@ public class Lecturer extends User {
     private double salary;
     private ArrayList<Attendance> attendance;  
     private static ArrayList<Lecturer> lecturerList = new ArrayList<Lecturer>();
-
+    //signUp method
     public Lecturer(User s, String specialization) {
         super(s.name, s.email, s.password, s.password, s.dob, s.gender,s.role);
         this.id = totalLecturers++;
@@ -20,7 +20,13 @@ public class Lecturer extends User {
         lecturerList.add(this);
         attendance = new ArrayList<Attendance>();
     }
-
+    //asign old user
+    public Lecturer (User user,String specialization, double salary,int id) {
+        super(user.name, user.email, user.password, user.password, user.dob, user.gender,user.role);
+        this.id = id;
+        this.specialization = specialization;
+        this.salary = salary;
+    }
     public static int getTotalLecturers() {
         return totalLecturers;
     }

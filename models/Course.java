@@ -3,7 +3,7 @@ import java.util.ArrayList;
 
 public class Course {
     private static int totalCourses = 0;  // Static variable to keep track of total courses
-    private String courseCode;
+    private int courseCode;
     private String courseName;
     private int creditHours;
     private Lecturer lecturer;
@@ -12,7 +12,7 @@ public class Course {
 
     private static ArrayList<Course> courseList = new ArrayList<>();
 
-    public Course(String courseCode, String courseName, int creditHours, Lecturer lecturer, String schedule, String classroom) {
+    public Course(int courseCode, String courseName, int creditHours, Lecturer lecturer, String schedule, String classroom) {
         this.courseCode = courseCode;
         this.courseName = courseName;
         this.creditHours = creditHours;
@@ -26,7 +26,7 @@ public class Course {
         return totalCourses;
     }
 
-    public String getCourseCode() {
+    public int getCourseCode() {
         return courseCode;
     }
 
@@ -54,18 +54,18 @@ public class Course {
         courseList.add(course);
     }
 
-    public static void removeCourseByCode(String courseCode) {
-        courseList.removeIf(course -> course.getCourseCode().equals(courseCode));
-    }
+    // public static void removeCourseByCode(String courseCode) {
+    //     courseList.removeIf(course -> course.getCourseCode().equals(courseCode));
+    // }
 
-    public static Course getCourseByCode(String courseCode) {
-        for (Course course : courseList) {
-            if (course.getCourseCode().equals(courseCode)) {
-                return course;
-            }
-        }
-        return null;  
-    }
+    // public static Course getCourseByCode(String courseCode) {
+    //     for (Course course : courseList) {
+    //         if (course.getCourseCode().equals(courseCode)) {
+    //             return course;
+    //         }
+    //     }
+    //     return null;  
+    // }
 
     public static ArrayList<Course> getCourseList() {
         return courseList;
@@ -81,15 +81,15 @@ public class Course {
         "Classroom: " + classroom;
     }
     //equals
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == this) {
-            return true;
-        }
-        if (obj == null || obj.getClass() != this.getClass()) {
-            return false;
-        }
-        Course c = (Course) obj;
-        return c.courseCode.equals(this.courseCode);
-    }
+    // @Override
+    // public boolean equals(Object obj) {
+    //     if (obj == this) {
+    //         return true;
+    //     }
+    //     if (obj == null || obj.getClass() != this.getClass()) {
+    //         return false;
+    //     }
+    //     Course c = (Course) obj;
+    //     // return c.courseCode.equals(this.courseCode);
+    // }
 }

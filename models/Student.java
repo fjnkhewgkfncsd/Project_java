@@ -27,6 +27,16 @@ public class Student extends User {
         Gen = gen;
         allUsers.add(this);
     }
+    //for asign old user
+    public Student(User s,String major,int gen,int id,int group,int term,double SchoolFee){
+        super(s.name, s.email, s.phoneNumber, s.password, s.dob, s.gender,s.role);
+        this.Major= major;
+        this.Gen = gen;
+        this.id = id;
+        this.group=group;
+        this.term=term;
+        this.Schoolfee = SchoolFee;
+    }
 
     public void submitAttendance(String courseId, String status, String remarks) {
         try {

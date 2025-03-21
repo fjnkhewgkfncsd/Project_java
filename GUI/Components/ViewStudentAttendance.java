@@ -10,7 +10,7 @@ import database.FetchData;
 public class ViewStudentAttendance extends JFrame {
     private JButton backButton;
 
-    public ViewStudentAttendance(String course,String courseId,Student student) {
+    public ViewStudentAttendance(String course,int courseId,Student student) {
         setTitle("View Attendance");
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

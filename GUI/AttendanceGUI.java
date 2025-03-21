@@ -5,7 +5,7 @@ import java.awt.*;
 import GUI.Components.*;
 
 public class AttendanceGUI {
-    public AttendanceGUI(String courseName,Student stu_info,String course_id) {
+    public AttendanceGUI(String courseName,Student stu_info,int course_id) {
         JFrame courseFrame = new JFrame(courseName + " - Details");
         courseFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         courseFrame.setSize(800, 500);
@@ -25,7 +25,7 @@ public class AttendanceGUI {
         CourseButton submitButton = new CourseButton("Submit Attendance", "A002", "8:30-10");
         submitButton.setBounds(20, 70, 210, 130); // (x, y, width, height)
 
-        CourseButton viewButton = new CourseButton("View Attendance",e -> {new ViewStudentAttendance(courseName,course_id,stu_info);},stu_info);
+        CourseButton viewButton = new CourseButton("View Attendance",e -> {new ViewStudentAttendance(courseName,course_id,stu_info);});
         viewButton.setBounds(250, 70, 210, 130); // (x, y, width, height)
 
         GroupCourse.add(submitButton);
@@ -37,6 +37,8 @@ public class AttendanceGUI {
         courseFrame.setVisible(true);
     }
     public static void main(String[] args) {
-        //SwingUtilities.invokeLater(() -> new AttendanceGUI("Math","A10",null).setVisible(true));
+        // SwingUtilities.invokeLater(() -> {
+        //     AttendanceGUI attendanceGUI = new AttendanceGUI("Math",null,"12:00-11:10");});
+
     }
 }

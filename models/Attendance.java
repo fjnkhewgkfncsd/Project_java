@@ -1,7 +1,6 @@
 package models;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import models.*;
 
 public class Attendance {
     protected LocalDate date;

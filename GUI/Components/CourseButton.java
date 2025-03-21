@@ -9,7 +9,7 @@ import java.awt.event.ActionListener;
 
 public class CourseButton extends JButton {
 
-    public CourseButton(String courseName,Student student,String courseId) {
+    public CourseButton(String courseName,Student student,int courseId) {
         super(courseName); // Set button text
         setFont(new Font("Arial", Font.PLAIN, 16));
         // Add click event
@@ -21,7 +21,7 @@ public class CourseButton extends JButton {
         });
     }
     //view attendance 
-    public CourseButton(String courseName, ActionListener actionListener,Student student) {
+    public CourseButton(String courseName, ActionListener actionListener) {
         super(courseName); // Set button text
         setFont(new Font("Arial", Font.PLAIN, 16));
 

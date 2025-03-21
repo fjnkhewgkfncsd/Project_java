@@ -16,7 +16,7 @@ public class CourseDAO {
         String sql = "Insert into Course (course_name,course_code,credit_hours,lecturer_id,schedule,classroom) values (?,?,?,?,?,?)";
         try(PreparedStatement statement = conn.prepareStatement(sql)){
             statement.setString(1, course.getCourseName());
-            statement.setString(2, course.getCourseCode());
+            statement.setInt(2, course.getCourseCode());
             statement.setInt(3, course.getCreditHours());
             statement.setInt(4, course.getLecturer().getId());
             statement.setString(5, course.getSchedule());

@@ -79,13 +79,13 @@ public class ViewStaffAttendance extends JFrame {
             }
         });
 
-        backButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                new StaffForm().setVisible(true);
-                dispose(); // Close current window
-            }
-        });
+        // backButton.addActionListener(new ActionListener() {
+        //     @Override
+        //     public void actionPerformed(ActionEvent e) {
+        //         new StaffForm().setVisible(true);
+        //         dispose(); // Close current window
+        //     }
+        // });
     }
 
     private String getAttendanceRecords(String staffId) {
