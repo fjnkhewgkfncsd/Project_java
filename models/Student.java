@@ -3,7 +3,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList; 
 import java.util.List;
-import database.signup.*;
+import database.signup.StudentDAO;
 public class Student extends User {
     private int id;
     private List<Course> courses;
@@ -12,9 +12,12 @@ public class Student extends User {
     private int group;
     private Department department;
     private int term;
+    private String classroom;
     private double Schoolfee;
     private String Major;
     private int Gen;
+
+    private static ArrayList<Student> studentList = new ArrayList<>();
 
     // Constructor for registration
     public Student(User s,String major,int gen) {
@@ -26,6 +29,7 @@ public class Student extends User {
         Major = major;
         Gen = gen;
         allUsers.add(this);
+        studentList.add(this);
     }
     //for asign old user
     public Student(User s,String major,int gen,int id,int group,int term,double SchoolFee){
@@ -82,6 +86,26 @@ public class Student extends User {
     public void setSchoolfee(double Schoolfee){this.Schoolfee=Schoolfee;}
     public void setMajor(String Major){this.Major=Major;}
     public void setGen(int Gen){this.Gen=Gen;}
+
+    public static Student getStudentById(String studentId) {
+        for (Student student : studentList) {
+            if (student.getId() == Integer.parseInt(studentId)) {
+                return student;
+            }
+        }
+        return null;
+    }
+
+    public void assignCourse(Course course, String group, String classroom, String year, String generation, String department) {
+        if (!courses.contains(course)) {
+            courses.add(course);
+            this.group = Integer.parseInt(group);
+            this.classroom = classroom;
+            this.term = Integer.parseInt(year);
+            this.Gen = Integer.parseInt(generation);
+            this.department = Department.getDepartmentByName(department); // Assuming a static method exists to fetch Department by name
+        }
+    }
 
     @Override
     public String toString() {

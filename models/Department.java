@@ -1,15 +1,29 @@
 package models;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class Department {
     static int totalDepartments = 0;
     private String name;
     private String Department_id;
     private String HOD;
+
+    private static List<Department> departments = new ArrayList<>();
     //cons
     public Department(String name, String location, String Department_id, String HOD) {
         this.name = name;
         this.Department_id = Department_id;
         this.HOD = HOD;
         totalDepartments++;
+    }
+    public static Department getDepartmentByName(String name) {
+        for (Department department : departments) {
+            if (department.name.equalsIgnoreCase(name)) {
+                return department;
+            }
+        }
+        return null; // Return null if no matching department is found
     }
     //toString 
     @Override
