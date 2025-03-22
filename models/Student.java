@@ -42,15 +42,15 @@ public class Student extends User {
         this.Schoolfee = SchoolFee;
     }
 
-    public void submitAttendance(String courseId, String status, String remarks) {
-        try {
-            StudentAttendance newRecord = new StudentAttendance(getId(), courseId, status, remarks);
-            attendance.add(newRecord);
-            System.out.println("✅ Attendance recorded for Student: " + name + " in Course: " + courseId);
-        } catch (Exception e) {
-            System.out.println("❌ Failed to submit attendance: " + e.getMessage());
-        }
-    }
+    // public void submitAttendance(String courseId, String status, String remarks,LocalDate date, LocalTime time) {
+    //     try {
+    //         StudentAttendance newRecord = new StudentAttendance(getId(),"Present",remarkField.getText(),courseId);
+    //         attendance.add(newRecord);
+    //         System.out.println("✅ Attendance recorded for Student: " + name + " in Course: " + courseId);
+    //     } catch (Exception e) {
+    //         System.out.println("❌ Failed to submit attendance: " + e.getMessage());
+    //     }
+    // }
 
     public void checkAttendance() {
         try {
@@ -76,8 +76,10 @@ public class Student extends User {
     public void addAttendance(StudentAttendance attendance) {
         this.attendance.add(attendance);
     }
+    public String getclassroom(){return classroom;}
 
     // Setters (Allow modifying values)
+    
     public void setCourse(List<Course> courses) { this.courses = courses; } 
     public void setAttendance(List<StudentAttendance> attendance) { this.attendance = attendance; }
     public void setGroup(int group){this.group=group;}

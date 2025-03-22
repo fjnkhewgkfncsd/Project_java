@@ -22,7 +22,7 @@ public class AttendanceGUI {
         GroupCourse.setLayout(null); // Disable layout manager
         GroupCourse.setPreferredSize(new Dimension(800, 500)); // Set fixed panel size
 
-        CourseButton submitButton = new CourseButton("Submit Attendance", "A002", "8:30-10");
+        CourseButton submitButton = new CourseButton("Submit Attendance", "A002", "8:30-10", stu_info,course_id);
         submitButton.setBounds(20, 70, 210, 130); // (x, y, width, height)
 
         CourseButton viewButton = new CourseButton("View Attendance",e -> {new ViewStudentAttendance(courseName,course_id,stu_info);});

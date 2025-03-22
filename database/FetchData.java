@@ -108,7 +108,7 @@ public class FetchData {
             System.out.println("❌ Failed to connect to the database.");
             return null;
         }
-        String sql = "SELECT * FROM StudentAttendance WHERE course_id = ? AND Student_id = ?";
+        String sql = "SELECT * FROM Student_Attendance WHERE course_id = ? AND Stu_id = ?";
         List<StudentAttendance> attendances = new ArrayList<>();
 
         try (PreparedStatement statement = conn.prepareStatement(sql)) {
@@ -118,10 +118,12 @@ public class FetchData {
 
             while (resultSet.next()) {
                 StudentAttendance attendance = new StudentAttendance(
-                    resultSet.getInt("person_id"),
+                    resultSet.getInt("stu_id"),
                     resultSet.getString("status"),
-                    resultSet.getString("remarks"),
-                    resultSet.getString("course_id"));
+                    resultSet.getString("remark"),
+                    resultSet.getInt("course_id"),
+                    resultSet.getDate("Attendance_date"),
+                    resultSet.getTime("Attendance_time"));
                 attendances.add(attendance);
             }
         } catch (SQLException e) {
@@ -136,7 +138,6 @@ public class FetchData {
             System.out.println("❌ Failed to connect to the database.");
             return new int[0]; // Return empty array instead of null
         }
-        System.err.println("Hello_course_id");
         List<Integer> courseList = new ArrayList<>();
         String sql = "SELECT Course_id FROM courseenrollment WHERE student_id = ?";
 
@@ -161,7 +162,6 @@ public class FetchData {
             System.out.println("❌ Failed to connect to the database.");
             return new ArrayList<>(); // Return an empty list instead of null
         }
-        System.err.println("hello_course");
         if (courseIds.length == 0) {
             return new ArrayList<>(); // No courses to fetch
         }

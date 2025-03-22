@@ -4,7 +4,6 @@ import database.*;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
-
 import GUI.Student_main_GUI;
 
 public class AttendaceDAO {
@@ -16,7 +15,7 @@ public class AttendaceDAO {
         }
         String sql;
         if (tableName.equals("Student")) {
-            sql = "INSERT INTO Student_Attendance (person_id, status, remark, Attendance_time, Attendance_date, course_id) VALUES (?, ?, ?, ?, ?, ?)";
+            sql = "INSERT INTO Student_Attendance (stu_id, status, remark, Attendance_time, Attendance_date, course_id) VALUES (?, ?, ?, ?, ?, ?)";
         } else {
             sql = "INSERT INTO " + tableName + "_attendance (person_id, status, remark, Attendance_time, Attendance_date) VALUES (?, ?, ?, ?, ?)";
         }
@@ -32,7 +31,7 @@ public class AttendaceDAO {
             statement.setDate(5, sqlDate);
             if(tableName.equals("Student")){
                 StudentAttendance studentAttendance = (StudentAttendance) attendance;
-                statement.setString(6, studentAttendance.getCourseId());
+                statement.setInt(6, studentAttendance.getCourseId());
             }
             statement.executeUpdate();
         } catch (SQLException e) {

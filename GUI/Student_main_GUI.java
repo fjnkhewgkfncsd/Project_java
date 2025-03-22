@@ -31,7 +31,7 @@ public class Student_main_GUI {
             List<Course> courseList = student.getCourses();
             for(int i=0;i<courseList.size();i++){
                 Course course = courseList.get(i);
-                GroupCourse.add(new CourseButton(course.getCourseName(),student,course.getCourseCode()));
+                GroupCourse.add(new CourseButton(course.getCourseName(),student,course.getCourseCode(),course.getSchedule(),course.getClassroom()));
             }
             MainPanel.add(GroupCourse,BorderLayout.CENTER);
         }

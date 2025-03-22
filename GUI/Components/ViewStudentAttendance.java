@@ -3,6 +3,7 @@ package GUI.Components;
 import GUI.Components.AttendanceDisplay;
 import javax.swing.*;
 import java.awt.*;
+import java.util.*;
 import java.util.List;
 import models.*;
 import database.FetchData;
@@ -10,11 +11,12 @@ import database.FetchData;
 public class ViewStudentAttendance extends JFrame {
     private JButton backButton;
 
-    public ViewStudentAttendance(String course,int courseId,Student student) {
+    public ViewStudentAttendance(String course, int courseId, Student student) {
         setTitle("View Attendance");
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
+
         // Header Panel
         JPanel headerPanel = new JPanel(new BorderLayout());
         JLabel header = new JLabel("View Attendance for " + course, SwingConstants.CENTER);
@@ -22,8 +24,13 @@ public class ViewStudentAttendance extends JFrame {
         headerPanel.add(header, BorderLayout.NORTH);
 
         List<StudentAttendance> attendances = FetchData.fetchAllStudentAttendances(courseId, student.getId());
-        // Attendance Display Panel
-        AttendanceDisplay attendanceDisplay = new AttendanceDisplay(attendances);
+        AttendanceDisplay attendanceDisplay = new AttendanceDisplay(new ArrayList<>()); // Initialize with empty list
+
+        if (attendances == null || attendances.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "No attendance records found.");
+        } else {
+            attendanceDisplay = new AttendanceDisplay(attendances);
+        }
 
         // Back Button Panel
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
@@ -42,6 +49,5 @@ public class ViewStudentAttendance extends JFrame {
     // Method to handle the back button action
     private void goBack() {
         this.dispose();
-        
     }
 }
