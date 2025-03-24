@@ -1,6 +1,9 @@
 package GUI;
 
 import javax.swing.*;
+
+import models.Lecturer;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -10,7 +13,7 @@ public class ViewLecturerForm extends JFrame {
     private JButton viewButton, backButton;
     private JTextArea attendanceArea;
 
-    public ViewLecturerForm() {
+    public ViewLecturerForm(Lecturer lecturer) {
         // Set the title and default close operation
         setTitle("View Attendance");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

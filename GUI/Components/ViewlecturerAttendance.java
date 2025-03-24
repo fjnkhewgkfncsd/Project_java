@@ -8,10 +8,10 @@ import java.util.List;
 import models.*;
 import database.FetchData;
 
-public class ViewStudentAttendance extends JFrame {
+public class ViewlecturerAttendance extends JFrame {
     private JButton backButton;
 
-    public ViewStudentAttendance(String course, int courseId, Student student) {
+    public ViewlecturerAttendance(Lecturer lecturer) {
         setTitle("View Attendance");
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -19,11 +19,11 @@ public class ViewStudentAttendance extends JFrame {
 
         // Header Panel
         JPanel headerPanel = new JPanel(new BorderLayout());
-        JLabel header = new JLabel("View Attendance for " + course, SwingConstants.CENTER);
+        JLabel header = new JLabel("View Attendance", SwingConstants.CENTER);
         header.setFont(new Font("SansSerif", Font.BOLD, 24));
         headerPanel.add(header, BorderLayout.NORTH);
 
-        List<Attendance> attendances = FetchData.fetchAllStudentAttendances(courseId, student.getId());
+        List<Attendance> attendances = FetchData.fetchLecturerAttendances(lecturer.getId());
         AttendanceDisplay attendanceDisplay = new AttendanceDisplay(new ArrayList<>()); // Initialize with empty list
 
         if (attendances == null || attendances.isEmpty()) {

@@ -24,7 +24,15 @@ public class Attendance {
     public Attendance(LocalDate date, LocalTime time, int personId, String status) {
         this(date, time, personId, status, "No remarks"); // Default remarks
     }
-
+    public Attendance(int personId, String status, String remarks) {
+        LocalDate date = LocalDate.now(); // or any specific date
+        LocalTime time = LocalTime.now(); // or any specific time
+        this.date = date;
+        this.time = time;
+        this.personId = personId;
+        setStatus(status); // Ensure valid status
+        this.remarks = remarks != null ? remarks : "No remarks"; // Default remarks if null
+    }
     // Getters and Setters
     public LocalDate getDate() { return date; }
     public void setDate(LocalDate date) { this.date = date; }

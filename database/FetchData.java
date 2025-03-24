@@ -91,7 +91,9 @@ public class FetchData {
                     resultSet.getString("position"));
                 }else{
                     return new Lecturer(user,
-                    resultSet.getString("specialization")); 
+                    resultSet.getString("specialization"),
+                    resultSet.getDouble("salary"),
+                    resultSet.getInt("lecturer_id")); 
                 }
             } 
         } catch (SQLException e) {
@@ -100,14 +102,14 @@ public class FetchData {
         }
         return null;
     }
-    public static List<StudentAttendance> fetchAllStudentAttendances(int course_id, int student_id) {
+    public static List<Attendance> fetchAllStudentAttendances(int course_id, int student_id) {
         Connection conn = DatabaseConnection.getConnection();
         if (conn == null) {
             System.out.println("❌ Failed to connect to the database.");
             return null;
         }
         String sql = "SELECT * FROM Student_Attendance WHERE course_id = ? AND Stu_id = ?";
-        List<StudentAttendance> attendances = new ArrayList<>();
+        List<Attendance> attendances = new ArrayList<>();
 
         try (PreparedStatement statement = conn.prepareStatement(sql)) {
             statement.setInt(1, course_id);
@@ -185,8 +187,8 @@ public class FetchData {
                     resultSet.getString("course_name"),
                     resultSet.getInt("credit_hours"),
                     lecturer,
-                    rs.getString("schedule"),
-                    rs.getString("classroom")
+                    resultSet.getString("schedule"),
+                    resultSet.getString("classroom")
                 );
                 courses.add(course);
                 student.setCourse(courses);
@@ -226,5 +228,33 @@ public class FetchData {
             return null;
         }
         return null;
+    }
+    public static List<Attendance> fetchLecturerAttendances(int lecturer_id) {
+        Connection conn = DatabaseConnection.getConnection();
+        if (conn == null) {
+            System.out.println("❌ Failed to connect to the database.");
+            return null;
+        }
+        String sql = "SELECT * FROM Lecturer_Attendance WHERE Lec_id = ?";
+        List<Attendance> attendances = new ArrayList<>();
+
+        try (PreparedStatement statement = conn.prepareStatement(sql)) {
+            statement.setInt(1, lecturer_id);
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                Attendance attendance = new Attendance(
+                    resultSet.getDate("Attendance_date").toLocalDate(),
+                    resultSet.getTime("Attendance_time").toLocalTime(),
+                    resultSet.getInt("Lec_id"),
+                    resultSet.getString("status"),
+                    resultSet.getString("remark"));
+                attendances.add(attendance);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return attendances;
     }
 }

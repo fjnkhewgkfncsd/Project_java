@@ -1,14 +1,18 @@
 package GUI;
 
 import javax.swing.*;
+
+import GUI.Components.ViewlecturerAttendance;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import models.Lecturer;
 
 public class LecturerForm extends JFrame {
     private JButton submitAttendanceButton, viewAttendanceButton;
 
-    public LecturerForm() {
+    public LecturerForm(Lecturer lecturer) {
         setTitle("Lecturer Dashboard");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -56,7 +60,7 @@ public class LecturerForm extends JFrame {
         submitAttendanceButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new AttendanceLecturerForm().setVisible(true);
+                new  AttendanceLecturer(lecturer).setVisible(true);
                 dispose();
             }
         });
@@ -64,13 +68,14 @@ public class LecturerForm extends JFrame {
         viewAttendanceButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new ViewLecturerForm().setVisible(true);
+                new ViewlecturerAttendance(lecturer).setVisible(true);
                 dispose();
             }
         });
+        setVisible(true);
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new LecturerForm().setVisible(true));
+        // SwingUtilities.invokeLater(() -> new LecturerForm().setVisible(true));
     }
 }

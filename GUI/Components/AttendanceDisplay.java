@@ -3,12 +3,13 @@ package GUI.Components;
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
-import models.StudentAttendance;
+import models.*;
+import models.Student;
 
 public class AttendanceDisplay extends JPanel {
     private JTextArea attendanceArea;
 
-    public AttendanceDisplay(List<StudentAttendance> attendanceList) {
+    public AttendanceDisplay(List<Attendance> attendanceList) {
         setLayout(new BorderLayout());
 
         // Create and configure the JTextArea
@@ -29,9 +30,9 @@ public class AttendanceDisplay extends JPanel {
     }
 
     // Method to populate the JTextArea with attendance data
-    private void populateAttendanceArea(List<StudentAttendance> attendanceList) {
+    private void populateAttendanceArea(List<Attendance> attendanceList) {
         StringBuilder sb = new StringBuilder();
-        for (StudentAttendance record : attendanceList) {
+        for (Attendance record : attendanceList) {
             sb.append(record).append("\n");
         }
         attendanceArea.setText(sb.toString());
