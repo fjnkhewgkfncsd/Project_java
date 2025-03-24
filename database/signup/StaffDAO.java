@@ -7,7 +7,7 @@ import database.DatabaseConnection;
 
 public class StaffDAO extends UserDAO {
     public void insertStaff(Staff staff, String tableName) {
-        String query = "UPDATE staff SET position=? WHERE email=?"; // Use email as the identifier
+        String insertQuery = "INSERT INTO staff (email, position) VALUES (?, ?)"; // Insert new record
         Connection conn = null;
         try {
             conn = DatabaseConnection.getConnection();
@@ -15,9 +15,9 @@ public class StaffDAO extends UserDAO {
             
             super.insert(staff, conn, tableName); // Insert core user data (including email)
             
-            try (PreparedStatement stmt = conn.prepareStatement(query)) {
-                stmt.setString(1, staff.getPosition());
-                stmt.setString(2, staff.getEmail()); // Match by email
+            try (PreparedStatement stmt = conn.prepareStatement(insertQuery)) {
+                stmt.setString(1, staff.getEmail());
+                stmt.setString(2, staff.getPosition());
                 stmt.executeUpdate();
             }
             conn.commit(); // Commit transaction

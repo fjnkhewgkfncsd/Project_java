@@ -1,15 +1,21 @@
-package GUI;
+package GUI.Admin;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import database.DatabaseConnection;
 
 public class ManageStudentsForm extends JFrame {
     private JTextField idField, nameField, schoolFeeField; // Updated field declarations
     private JTable studentTable;
     private DefaultTableModel tableModel;
+    private JButton backButton; // Add back button
 
     public ManageStudentsForm() {
         setTitle("Manage Students");
@@ -42,7 +48,7 @@ public class ManageStudentsForm extends JFrame {
         mainPanel.add(inputPanel, BorderLayout.NORTH);
 
         // Button Panel
-        JPanel buttonPanel = new JPanel(new GridLayout(1, 4, 20, 10));
+        JPanel buttonPanel = new JPanel(new GridLayout(2, 3, 20, 10)); // Adjusted layout for better alignment
         buttonPanel.setBackground(new Color(240, 240, 240)); // Match main panel background
 
         JButton addButton = createStyledButton("Add");
@@ -81,7 +87,19 @@ public class ManageStudentsForm extends JFrame {
         });
         buttonPanel.add(viewButton);
 
-        mainPanel.add(buttonPanel, BorderLayout.CENTER);
+        // Add back button to the button panel
+        backButton = createStyledButton("Back");
+        backButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new AdminForm().setVisible(true);
+                dispose();
+            }
+        });
+        buttonPanel.add(backButton);
+
+        // Add button panel to the bottom of the layout
+        mainPanel.add(buttonPanel, BorderLayout.SOUTH);
 
         // Table Panel
         JPanel tablePanel = new JPanel(new BorderLayout());
@@ -94,7 +112,8 @@ public class ManageStudentsForm extends JFrame {
         JScrollPane scrollPane = new JScrollPane(studentTable);
         tablePanel.add(scrollPane, BorderLayout.CENTER);
 
-        mainPanel.add(tablePanel, BorderLayout.SOUTH);
+        // Move table panel to the center
+        mainPanel.add(tablePanel, BorderLayout.CENTER);
 
         // Add main panel to the frame
         add(mainPanel);
@@ -120,9 +139,21 @@ public class ManageStudentsForm extends JFrame {
             return;
         }
 
-        tableModel.addRow(new Object[]{id, name, schoolFee}); // Updated row data
-        clearFields();
-        JOptionPane.showMessageDialog(this, "Student added successfully.");
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            String sql = "INSERT INTO student (id, name, school_fee) VALUES (?, ?, ?)";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, Integer.parseInt(id));
+            stmt.setString(2, name);
+            stmt.setDouble(3, Double.parseDouble(schoolFee));
+            stmt.executeUpdate();
+
+            tableModel.addRow(new Object[]{id, name, schoolFee});
+            clearFields();
+            JOptionPane.showMessageDialog(this, "Student added successfully.");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error adding student.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private void editStudent() {
@@ -141,11 +172,23 @@ public class ManageStudentsForm extends JFrame {
             return;
         }
 
-        tableModel.setValueAt(id, selectedRow, 0);
-        tableModel.setValueAt(name, selectedRow, 1);
-        tableModel.setValueAt(schoolFee, selectedRow, 2); // Updated column index
-        clearFields();
-        JOptionPane.showMessageDialog(this, "Student record updated successfully.");
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            String sql = "UPDATE student SET name = ?, school_fee = ? WHERE id = ?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, name);
+            stmt.setDouble(2, Double.parseDouble(schoolFee));
+            stmt.setInt(3, Integer.parseInt(id));
+            stmt.executeUpdate();
+
+            tableModel.setValueAt(id, selectedRow, 0);
+            tableModel.setValueAt(name, selectedRow, 1);
+            tableModel.setValueAt(schoolFee, selectedRow, 2); // Updated column index
+            clearFields();
+            JOptionPane.showMessageDialog(this, "Student record updated successfully.");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error updating student.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private void deleteStudent() {
@@ -155,9 +198,21 @@ public class ManageStudentsForm extends JFrame {
             return;
         }
 
-        tableModel.removeRow(selectedRow);
-        clearFields();
-        JOptionPane.showMessageDialog(this, "Student record deleted successfully.");
+        String id = tableModel.getValueAt(selectedRow, 0).toString();
+
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            String sql = "DELETE FROM student WHERE id = ?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, Integer.parseInt(id));
+            stmt.executeUpdate();
+
+            tableModel.removeRow(selectedRow);
+            clearFields();
+            JOptionPane.showMessageDialog(this, "Student record deleted successfully.");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error deleting student.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private void viewStudent() {
@@ -168,10 +223,22 @@ public class ManageStudentsForm extends JFrame {
         }
 
         String id = tableModel.getValueAt(selectedRow, 0).toString();
-        String name = tableModel.getValueAt(selectedRow, 1).toString();
-        String schoolFee = tableModel.getValueAt(selectedRow, 2).toString(); // Updated column index
 
-        JOptionPane.showMessageDialog(this, "Student Details:\nID: " + id + "\nName: " + name + "\nSchool Fee: " + schoolFee); // Updated message
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            String sql = "SELECT * FROM student WHERE id = ?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, Integer.parseInt(id));
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                String name = rs.getString("name");
+                String schoolFee = String.valueOf(rs.getDouble("school_fee"));
+                JOptionPane.showMessageDialog(this, "Student Details:\nID: " + id + "\nName: " + name + "\nSchool Fee: " + schoolFee); // Updated message
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error viewing student.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private void clearFields() {

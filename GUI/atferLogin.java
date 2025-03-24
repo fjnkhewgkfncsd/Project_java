@@ -12,8 +12,10 @@ public class atferLogin {
 
             new Student_main_GUI(student);
         }else if(user.getRole().equals("Staff")){
-            if(user instanceof Staff)
-            new StaffForm((Staff) user);
+            if(user instanceof Staff) {
+                Staff staff = (Staff) user;
+                new StaffForm(staff).setVisible(true); // Pass the staff object to StaffForm
+            }
         }else if (user.getRole().equals("Lecturer")){
             if(user instanceof Lecturer);
             Lecturer lecturer = (Lecturer) user;

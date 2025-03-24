@@ -1,15 +1,21 @@
-package GUI;
+package GUI.Admin;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import database.DatabaseConnection;
 
 public class ManageLecturesForm extends JFrame {
     private JTextField lectureIdField, courseField, salaryField;
     private JTable lectureTable;
     private DefaultTableModel tableModel;
+    private JButton backButton; // Add back button
 
     public ManageLecturesForm() {
         setTitle("Manage Lectures");
@@ -42,7 +48,7 @@ public class ManageLecturesForm extends JFrame {
         mainPanel.add(inputPanel, BorderLayout.NORTH);
 
         // Button Panel
-        JPanel buttonPanel = new JPanel(new GridLayout(1, 4, 20, 10));
+        JPanel buttonPanel = new JPanel(new GridLayout(2, 3, 20, 10)); // Adjust button panel layout for better alignment
         buttonPanel.setBackground(new Color(240, 240, 240)); // Match main panel background
 
         JButton addButton = createStyledButton("Add");
@@ -81,7 +87,19 @@ public class ManageLecturesForm extends JFrame {
         });
         buttonPanel.add(viewButton);
 
-        mainPanel.add(buttonPanel, BorderLayout.CENTER);
+        // Add back button to the button panel
+        backButton = createStyledButton("Back");
+        backButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new AdminForm().setVisible(true);
+                dispose();
+            }
+        });
+        buttonPanel.add(backButton);
+
+        // Add button panel to the bottom of the layout
+        mainPanel.add(buttonPanel, BorderLayout.SOUTH);
 
         // Table Panel
         JPanel tablePanel = new JPanel(new BorderLayout());
@@ -94,7 +112,8 @@ public class ManageLecturesForm extends JFrame {
         JScrollPane scrollPane = new JScrollPane(lectureTable);
         tablePanel.add(scrollPane, BorderLayout.CENTER);
 
-        mainPanel.add(tablePanel, BorderLayout.SOUTH);
+        // Move table panel to the center
+        mainPanel.add(tablePanel, BorderLayout.CENTER);
 
         // Add main panel to the frame
         add(mainPanel);
@@ -120,9 +139,21 @@ public class ManageLecturesForm extends JFrame {
             return;
         }
 
-        tableModel.addRow(new Object[]{lectureId, course, salary});
-        clearFields();
-        JOptionPane.showMessageDialog(this, "Lecture added successfully.");
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            String sql = "INSERT INTO lecturer (lecturer_id, specialization, salary) VALUES (?, ?, ?)";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, Integer.parseInt(lectureId));
+            stmt.setString(2, course);
+            stmt.setDouble(3, Double.parseDouble(salary));
+            stmt.executeUpdate();
+
+            tableModel.addRow(new Object[]{lectureId, course, salary});
+            clearFields();
+            JOptionPane.showMessageDialog(this, "Lecture added successfully.");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error adding lecture.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private void editLecture() {
@@ -141,11 +172,23 @@ public class ManageLecturesForm extends JFrame {
             return;
         }
 
-        tableModel.setValueAt(lectureId, selectedRow, 0);
-        tableModel.setValueAt(course, selectedRow, 1);
-        tableModel.setValueAt(salary, selectedRow, 2);
-        clearFields();
-        JOptionPane.showMessageDialog(this, "Lecture record updated successfully.");
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            String sql = "UPDATE lecturer SET specialization = ?, salary = ? WHERE lecturer_id = ?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, course);
+            stmt.setDouble(2, Double.parseDouble(salary));
+            stmt.setInt(3, Integer.parseInt(lectureId));
+            stmt.executeUpdate();
+
+            tableModel.setValueAt(lectureId, selectedRow, 0);
+            tableModel.setValueAt(course, selectedRow, 1);
+            tableModel.setValueAt(salary, selectedRow, 2);
+            clearFields();
+            JOptionPane.showMessageDialog(this, "Lecture record updated successfully.");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error updating lecture.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private void deleteLecture() {
@@ -155,9 +198,21 @@ public class ManageLecturesForm extends JFrame {
             return;
         }
 
-        tableModel.removeRow(selectedRow);
-        clearFields();
-        JOptionPane.showMessageDialog(this, "Lecture record deleted successfully.");
+        String lectureId = tableModel.getValueAt(selectedRow, 0).toString();
+
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            String sql = "DELETE FROM lecturer WHERE lecturer_id = ?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, Integer.parseInt(lectureId));
+            stmt.executeUpdate();
+
+            tableModel.removeRow(selectedRow);
+            clearFields();
+            JOptionPane.showMessageDialog(this, "Lecture record deleted successfully.");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error deleting lecture.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private void viewLecture() {
@@ -168,10 +223,22 @@ public class ManageLecturesForm extends JFrame {
         }
 
         String lectureId = tableModel.getValueAt(selectedRow, 0).toString();
-        String course = tableModel.getValueAt(selectedRow, 1).toString();
-        String salary = tableModel.getValueAt(selectedRow, 2).toString();
 
-        JOptionPane.showMessageDialog(this, "Lecture Details:\nLecture ID: " + lectureId + "\nCourse: " + course + "\nSalary: " + salary);
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            String sql = "SELECT * FROM lecturer WHERE lecturer_id = ?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, Integer.parseInt(lectureId));
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                String course = rs.getString("specialization");
+                String salary = String.valueOf(rs.getDouble("salary"));
+                JOptionPane.showMessageDialog(this, "Lecture Details:\nLecture ID: " + lectureId + "\nCourse: " + course + "\nSalary: " + salary);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error viewing lecture.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private void clearFields() {

@@ -81,15 +81,6 @@ public class Staff extends User {
         Staff staff = (Staff) obj;
         return staffId == staff.staffId && position.equals(staff.position) && hireDate.equals(staff.hireDate) && endDate.equals(staff.endDate) && salary == staff.salary;
     }
-    public void submitAttendance(Attendance attendance) {
-        try {
-            Attendance record = new Attendance(attendance.getDate(), attendance.getTime(), staffId, attendance.getStatus(), attendance.getRemarks());
-            attendanceList.add(record);
-            System.out.println("✅ Attendance recorded for Staff: " + name);
-        } catch (Exception e) {
-            System.out.println("❌ Failed to submit attendance: " + e.getMessage());
-        }
-    }
 
     public void checkAttendance() {
         try {
@@ -100,6 +91,35 @@ public class Staff extends User {
         } catch (Exception e) {
             System.out.println("❌ Failed to check attendance: " + e.getMessage());
         }
+    }
+
+    // Method to add attendance for a staff member
+    public void addAttendance(Attendance attendanceRecord) {
+        attendanceList.add(attendanceRecord);
+        System.out.println("Attendance added for staff ID: " + attendanceRecord.getPersonId());
+    }
+
+    // Method to update attendance for a staff member
+    public void updateAttendance(int personId, String date, boolean present) {
+        for (Attendance record : attendanceList) {
+            if (record.getPersonId() == personId && record.getDate().toString().equals(date)) {
+                record.setStatus(present ? "Present" : "Absent");
+                System.out.println("Attendance updated for staff ID: " + personId);
+                return;
+            }
+        }
+        System.out.println("Attendance record not found for staff ID: " + personId);
+    }
+
+    // Method to get attendance for a staff member
+    public ArrayList<Attendance> getAttendance(int personId) {
+        ArrayList<Attendance> staffAttendance = new ArrayList<>();
+        for (Attendance record : attendanceList) {
+            if (record.getPersonId() == personId) {
+                staffAttendance.add(record);
+            }
+        }
+        return staffAttendance;
     }
 
     public void signUp(Staff staff){

@@ -7,8 +7,6 @@ import java.util.*;
 
 import database.signup.UserDAO;
 import models.*;
-import java.util.Collections;
-import java.util.HashMap;
 
 public class FetchData {
     public static boolean isEmailTaken(String email) {
@@ -249,6 +247,65 @@ public class FetchData {
                     resultSet.getInt("Lec_id"),
                     resultSet.getString("status"),
                     resultSet.getString("remark"));
+                attendances.add(attendance);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return attendances;
+    }
+    public static Staff fetchStaff(int person_id) {
+        Connection conn = DatabaseConnection.getConnection();
+        if (conn == null) {
+            System.out.println("❌ Failed to connect to the database.");
+            return null;
+        }
+        String sql = "SELECT user.name, user.email, user.phone_number, user.password, user.dob, user.sex, user.role, staff.position " +
+                     "FROM user INNER JOIN staff ON user.email = staff.email WHERE staff.staff_id = ?";
+        try (PreparedStatement statement = conn.prepareStatement(sql)) {
+            statement.setInt(1, person_id);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                User user = new User(
+                    resultSet.getString("name"),
+                    resultSet.getString("email"),
+                    resultSet.getString("phone_number"),
+                    resultSet.getString("password"),
+                    resultSet.getString("dob"),
+                    resultSet.getString("sex").charAt(0),
+                    resultSet.getString("role")
+                );
+                return new Staff(user, 
+                    resultSet.getString("position"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return null;
+    }
+    public static List<Attendance> fetchAllStaffAttendances(int staffId) {
+        Connection conn = DatabaseConnection.getConnection();
+        if (conn == null) {
+            System.out.println("❌ Failed to connect to the database.");
+            return null;
+        }
+        String sql = "SELECT * FROM staff_attendance WHERE person_id = ?";
+        List<Attendance> attendances = new ArrayList<>();
+
+        try (PreparedStatement statement = conn.prepareStatement(sql)) {
+            statement.setInt(1, staffId);
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                Attendance attendance = new Attendance(
+                    resultSet.getDate("attendance_date").toLocalDate(),
+                    resultSet.getTime("attendance_time").toLocalTime(),
+                    resultSet.getInt("person_id"),
+                    resultSet.getString("status"),
+                    resultSet.getString("remark")
+                );
                 attendances.add(attendance);
             }
         } catch (SQLException e) {

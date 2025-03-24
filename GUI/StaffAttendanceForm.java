@@ -4,160 +4,104 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import models.*;
-import GUI.*;
-import models.Attendance;
 import models.Staff;
+import models.Attendance;
+import database.AttendanceDAO;
 
 public class StaffAttendanceForm extends JFrame {
-    private JTextField staffIdField;
-    private JCheckBox presentCheckBox;
-    private JButton submitButton, backButton, viewAttendanceButton;
-    private StaffForm staffForm;
+    private JTextField remarkField;
 
-    public StaffAttendanceForm() {
+    public StaffAttendanceForm(Staff staff) {
         setTitle("Submit Attendance");
-        setExtendedState(JFrame.MAXIMIZED_BOTH); // Full-screen mode
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null); // Center the window
-        this.staffForm = staffForm;
+        setSize(600, 300); // Larger frame size
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setLocationRelativeTo(null);
 
-        JPanel panel = new JPanel(new GridBagLayout());
-        panel.setBackground(new Color(240, 240, 240)); // Light background color
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(20, 20, 20, 20); // Add padding between components
-        gbc.fill = GridBagConstraints.HORIZONTAL;
+        // Use a modern look and feel
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-        // Staff ID Label and TextField
-        JLabel staffIdLabel = new JLabel("Staff ID:");
-        staffIdLabel.setFont(new Font("SansSerif", Font.BOLD, 28));
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        panel.add(staffIdLabel, gbc);
+        // Main panel with padding
+        JPanel mainPanel = new JPanel(new BorderLayout(10, 10));
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        mainPanel.setBackground(new Color(240, 240, 240)); // Light gray background
 
-        staffIdField = new JTextField(30);
-        staffIdField.setFont(new Font("SansSerif", Font.PLAIN, 28));
-        gbc.gridx = 1;
-        panel.add(staffIdField, gbc);
+        // Header Panel
+        JPanel headerPanel = new JPanel(new BorderLayout());
+        headerPanel.setBackground(new Color(240, 240, 240)); // Light gray background
+        JLabel headerLabel = new JLabel("Submit Staff Attendance", SwingConstants.CENTER);
+        headerLabel.setFont(new Font("SansSerif", Font.BOLD, 24)); // Bigger font size
+        headerLabel.setForeground(new Color(50, 50, 50)); // Dark gray text
+        headerPanel.add(headerLabel, BorderLayout.CENTER);
 
-        // Present Label and CheckBox
-        JLabel presentLabel = new JLabel("Present:");
-        presentLabel.setFont(new Font("SansSerif", Font.BOLD, 28));
-        gbc.gridx = 0;
-        gbc.gridy = 1;
-        panel.add(presentLabel, gbc);
+        // Remark Input Panel
+        JPanel remarkPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
+        remarkPanel.setBackground(new Color(240, 240, 240)); // Light gray background
+        JLabel remarkLabel = new JLabel("Remark:");
+        remarkLabel.setFont(new Font("SansSerif", Font.PLAIN, 18)); // Bigger font size
+        remarkLabel.setForeground(new Color(50, 50, 50)); // Dark gray text
+        remarkField = new JTextField(30); // Wider text field
+        remarkField.setFont(new Font("SansSerif", Font.PLAIN, 16)); // Bigger font size
+        remarkField.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(new Color(200, 200, 200)), // Light gray border
+            BorderFactory.createEmptyBorder(5, 10, 5, 10) // Padding inside the text field
+        ));
+        remarkPanel.add(remarkLabel);
+        remarkPanel.add(remarkField);
 
-        presentCheckBox = new JCheckBox();
-        presentCheckBox.setPreferredSize(new Dimension(30, 40)); // Size of the checkbox
-        presentCheckBox.setBackground(new Color(240, 240, 240)); // Match background color
-        gbc.gridx = 1;
-        panel.add(presentCheckBox, gbc);
-
-        // Buttons
-        submitButton = new StyledButton("Submit");
-        backButton = new StyledButton("Back");
-        viewAttendanceButton = new StyledButton("View Attendance");
-
-        gbc.gridx = 0;
-        gbc.gridy = 2;
-        gbc.gridwidth = 2;
-        gbc.anchor = GridBagConstraints.CENTER;
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 0));
-        buttonPanel.setOpaque(false);
-        buttonPanel.add(submitButton);
-        buttonPanel.add(viewAttendanceButton);
-        buttonPanel.add(backButton);
-        panel.add(buttonPanel, gbc);
-
-        add(panel);
-
-        // Submit button action
+        // Submit Button Panel
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
+        buttonPanel.setBackground(new Color(240, 240, 240)); // Light gray background
+        JButton submitButton = new JButton("Submit");
+        submitButton.setFont(new Font("SansSerif", Font.PLAIN, 16)); // Smaller font size
+        submitButton.setPreferredSize(new Dimension(120, 40)); // Smaller button size
+        submitButton.setBackground(new Color(50, 150, 250)); // Blue background
+        submitButton.setForeground(Color.WHITE); // White text
+        submitButton.setFocusPainted(false); // Remove focus border
+        submitButton.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20)); // Padding inside the button
         submitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String staffId = staffIdField.getText().trim();
-                if (staffId.isEmpty()) {
-                    JOptionPane.showMessageDialog(null, "Please enter a Staff ID.", "Input Error", JOptionPane.ERROR_MESSAGE);
-                } else {
-                    try {
-                        int id = Integer.parseInt(staffId);
-                        Staff staff = null;
-                        for (Staff s : Staff.getStaffList()) {
-                            if (s.getId() == id) {
-                                staff = s;
-                                break;
-                            }
-                        }
-                        if (staff == null) {
-                            JOptionPane.showMessageDialog(null, "No staff found with ID: " + staffId, "Error", JOptionPane.ERROR_MESSAGE);
-                            return;
-                        }
-                        String attendanceStatus = presentCheckBox.isSelected() ? "Present" : "Absent";
-                        Attendance attendance = new Attendance(LocalDate.now(), attendanceStatus);
-                        staff.submitAttendance(attendance);
-                        JOptionPane.showMessageDialog(null, "Attendance submitted for Staff ID: " + staffId, "Success", JOptionPane.INFORMATION_MESSAGE);
-                    } catch (NumberFormatException ex) {
-                        JOptionPane.showMessageDialog(null, "Invalid Staff ID. Please enter a numeric value.", "Input Error", JOptionPane.ERROR_MESSAGE);
-                    }
-                }
+                submitAttendance(staff);
             }
         });
+        buttonPanel.add(submitButton);
 
-        // View Attendance button action
-        viewAttendanceButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                new ViewStaffAttendance().setVisible(true); // Open ViewAttendance window
-            }
-        });
+        // Add components to the main panel
+        mainPanel.add(headerPanel, BorderLayout.NORTH);
+        mainPanel.add(remarkPanel, BorderLayout.CENTER);
+        mainPanel.add(buttonPanel, BorderLayout.SOUTH);
 
-        // Back button action
-        backButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                dispose(); // Close the current window
-                staffForm.setVisible(true); // Show the existing StaffForm instance
-            }
-        });
+        // Add main panel to the frame
+        add(mainPanel);
+
+        setVisible(true);
+    }
+
+    private void submitAttendance(Staff staff) {
+        String remark = remarkField.getText().trim();
+
+        if (remark.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter a remark.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Save attendance to the database
+        Attendance attendance = new Attendance(staff.getId(), "Present", remark);
+        AttendanceDAO.insertStaffAttendance(attendance);
+
+        JOptionPane.showMessageDialog(this, "Attendance submitted successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+        remarkField.setText(""); // Clear the remark field
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new StaffAttendanceForm().setVisible(true));
-    }
-
-    // Custom StyledButton class for styling buttons
-    private static class StyledButton extends JButton {
-        public StyledButton(String text) {
-            super(text);
-            setFont(new Font("SansSerif", Font.BOLD, 18));
-            setForeground(Color.BLACK);
-            setBackground(new Color(65, 105, 225)); // Royal Blue
-            setBorderPainted(false);
-            setFocusPainted(false);
-            setPreferredSize(new Dimension(140, 45)); // Button size
-
-            // Hover effect
-            addMouseListener(new java.awt.event.MouseAdapter() {
-                @Override
-                public void mouseEntered(java.awt.event.MouseEvent evt) {
-                    setBackground(new Color(72, 118, 255)); // Lighter blue on hover
-                }
-
-                @Override
-                public void mouseExited(java.awt.event.MouseEvent evt) {
-                    setBackground(new Color(65, 105, 225)); // Original color
-                }
-
-                @Override
-                public void mousePressed(java.awt.event.MouseEvent evt) {
-                    setBackground(new Color(39, 64, 139)); // Darker blue on click
-                }
-
-                @Override
-                public void mouseReleased(java.awt.event.MouseEvent evt) {
-                    setBackground(new Color(72, 118, 255)); // Back to lighter blue
-                }
-            });
-        }
+        // Example usage
+        // SwingUtilities.invokeLater(() -> {
+        //     Staff staff = new Staff(1, "John Doe"); // Replace with actual staff object
+        //     new StaffAttendanceForm(staff);
+        // });
     }
 }

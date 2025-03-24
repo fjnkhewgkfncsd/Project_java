@@ -5,18 +5,32 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import models.*;
+import GUI.Components.ViewStaffAttendance;
+
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import models.Staff;
 
 public class StaffForm extends JFrame {
     private JButton submitAttendanceButton, viewAttendanceButton;
 
     public StaffForm(Staff staff) {
         setTitle("Staff Dashboard");
-        setExtendedState(JFrame.MAXIMIZED_BOTH); // Make the form full screen
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        // Set the size to half of the screen
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int width = screenSize.width / 2;
+        int height = screenSize.height / 2;
+        setSize(width, height);
+
+        // Center the frame on the screen
         setLocationRelativeTo(null);
 
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(2, 1, 10, 10));
+        panel.setBackground(new Color(44, 62, 80)); // Dark background
 
         submitAttendanceButton = new JButton("Submit Attendance");
         viewAttendanceButton = new JButton("View Attendance");
@@ -31,6 +45,16 @@ public class StaffForm extends JFrame {
         submitAttendanceButton.setPreferredSize(buttonSize);
         viewAttendanceButton.setPreferredSize(buttonSize);
 
+        // Button colors
+        submitAttendanceButton.setBackground(new Color(52, 152, 219)); // Blue
+        submitAttendanceButton.setForeground(Color.WHITE);
+        viewAttendanceButton.setBackground(new Color(46, 204, 113)); // Green
+        viewAttendanceButton.setForeground(Color.WHITE);
+
+        // Border styling
+        submitAttendanceButton.setFocusPainted(false);
+        viewAttendanceButton.setFocusPainted(false);
+
         panel.add(submitAttendanceButton);
         panel.add(viewAttendanceButton);
 
@@ -39,7 +63,7 @@ public class StaffForm extends JFrame {
         submitAttendanceButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new StaffAttendanceForm().setVisible(true);
+                new StaffAttendanceForm(staff).setVisible(true); // Pass staff object
                 dispose();
             }
         });
@@ -47,14 +71,11 @@ public class StaffForm extends JFrame {
         viewAttendanceButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new ViewStaffAttendance().setVisible(true);
+                new ViewStaffAttendance(staff.getName(), staff.getId()).setVisible(true);
                 dispose();
             }
         });
-    }
 
-    public static void main(String[] args) {
-        Staff staff = new Staff(new User("John Doe", "john.doe@example.com", "123456789", "password", "1990-01-01", 'M', "Staff"), "Manager");
-        SwingUtilities.invokeLater(() -> new StaffForm(staff).setVisible(true));
+        setVisible(true);
     }
 }

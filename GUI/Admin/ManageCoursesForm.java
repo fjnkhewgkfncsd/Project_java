@@ -1,14 +1,19 @@
-package GUI;
+package GUI.Admin;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import models.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import database.DatabaseConnection;
 
 public class ManageCoursesForm extends JFrame {
     private JTextField studentIdField, courseIdField, groupField, classroomField, yearField, generationField, departmentField;
     private JTextArea infoTextArea;
+    private JButton backButton; // Add back button
 
     public ManageCoursesForm() {
         setTitle("Manage Courses");
@@ -64,10 +69,8 @@ public class ManageCoursesForm extends JFrame {
         JScrollPane scrollPane = new JScrollPane(infoTextArea);
         infoPanel.add(scrollPane, BorderLayout.CENTER);
 
-        mainPanel.add(infoPanel, BorderLayout.CENTER);
-
         // Button Panel
-        JPanel buttonPanel = new JPanel(new GridLayout(1, 2, 20, 10));
+        JPanel buttonPanel = new JPanel(new GridLayout(1, 3, 20, 10)); // Adjust button panel layout for better alignment
         buttonPanel.setBackground(new Color(240, 240, 240));
 
         JButton assignButton = createStyledButton("Assign Course");
@@ -88,7 +91,22 @@ public class ManageCoursesForm extends JFrame {
         });
         buttonPanel.add(clearButton);
 
+        // Add back button to the button panel
+        backButton = createStyledButton("Back");
+        backButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new AdminForm().setVisible(true);
+                dispose();
+            }
+        });
+        buttonPanel.add(backButton);
+
+        // Add button panel to the bottom of the layout
         mainPanel.add(buttonPanel, BorderLayout.SOUTH);
+
+        // Move info panel to the center
+        mainPanel.add(infoPanel, BorderLayout.CENTER);
 
         // Add main panel to frame
         add(mainPanel);
@@ -118,24 +136,17 @@ public class ManageCoursesForm extends JFrame {
             return;
         }
 
-        Student student = Student.getStudentById(studentId);
-        Course course = Course.getCourseByCode(courseId);
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            String sql = "INSERT INTO courseenrollment (student_id, course_id) VALUES (?, ?)";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, Integer.parseInt(studentId));
+            stmt.setInt(2, Integer.parseInt(courseId));
+            stmt.executeUpdate();
 
-        if (student == null) {
-            JOptionPane.showMessageDialog(this, "Student not found.", "Error", JOptionPane.ERROR_MESSAGE);
-        } else if (course == null) {
-            JOptionPane.showMessageDialog(this, "Course not found.", "Error", JOptionPane.ERROR_MESSAGE);
-        } else {
-            // Assuming the assignCourse method exists in the Student class
-            student.assignCourse(course, group, classroom, year, generation, department);
-            JOptionPane.showMessageDialog(this, "Course assigned successfully!\n\nDetails:\n"
-                + "Student ID: " + studentId + "\n"
-                + "Course ID: " + courseId + "\n"
-                + "Group: " + group + "\n"
-                + "Classroom: " + classroom + "\n"
-                + "Year: " + year + "\n"
-                + "Generation: " + generation + "\n"
-                + "Department: " + department, "Success", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Course assigned successfully!");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error assigning course.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 

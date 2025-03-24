@@ -1,15 +1,21 @@
-package GUI;
+package GUI.Admin;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import database.DatabaseConnection;
 
 public class ManageStaffForm extends JFrame {
     private JTextField idField, positionField, salaryField;
     private JTable staffTable;
     private DefaultTableModel tableModel;
+    private JButton backButton; // Add back button
 
     public ManageStaffForm() {
         setTitle("Manage Staff");
@@ -42,7 +48,7 @@ public class ManageStaffForm extends JFrame {
         mainPanel.add(inputPanel, BorderLayout.NORTH);
 
         // Button Panel
-        JPanel buttonPanel = new JPanel(new GridLayout(1, 4, 20, 10));
+        JPanel buttonPanel = new JPanel(new GridLayout(2, 3, 20, 10)); // Adjusted layout for better alignment
         buttonPanel.setBackground(new Color(240, 240, 240)); // Match main panel background
 
         JButton addButton = createStyledButton("Add");
@@ -81,7 +87,16 @@ public class ManageStaffForm extends JFrame {
         });
         buttonPanel.add(viewButton);
 
-        mainPanel.add(buttonPanel, BorderLayout.CENTER);
+        // Add back button to the button panel
+        backButton = createStyledButton("Back");
+        backButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new AdminForm().setVisible(true);
+                dispose();
+            }
+        });
+        buttonPanel.add(backButton);
 
         // Table Panel
         JPanel tablePanel = new JPanel(new BorderLayout());
@@ -94,7 +109,11 @@ public class ManageStaffForm extends JFrame {
         JScrollPane scrollPane = new JScrollPane(staffTable);
         tablePanel.add(scrollPane, BorderLayout.CENTER);
 
-        mainPanel.add(tablePanel, BorderLayout.SOUTH);
+        // Move table panel to the center
+        mainPanel.add(tablePanel, BorderLayout.CENTER);
+
+        // Add button panel to the bottom of the layout
+        mainPanel.add(buttonPanel, BorderLayout.SOUTH);
 
         // Add main panel to the frame
         add(mainPanel);
@@ -120,9 +139,21 @@ public class ManageStaffForm extends JFrame {
             return;
         }
 
-        tableModel.addRow(new Object[]{id, position, salary});
-        clearFields();
-        JOptionPane.showMessageDialog(this, "Staff added successfully.");
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            String sql = "INSERT INTO staff (staff_id, position, salary) VALUES (?, ?, ?)";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, Integer.parseInt(id));
+            stmt.setString(2, position);
+            stmt.setDouble(3, Double.parseDouble(salary));
+            stmt.executeUpdate();
+
+            tableModel.addRow(new Object[]{id, position, salary});
+            clearFields();
+            JOptionPane.showMessageDialog(this, "Staff added successfully.");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error adding staff.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private void editStaff() {
@@ -141,11 +172,23 @@ public class ManageStaffForm extends JFrame {
             return;
         }
 
-        tableModel.setValueAt(id, selectedRow, 0);
-        tableModel.setValueAt(position, selectedRow, 1);
-        tableModel.setValueAt(salary, selectedRow, 2);
-        clearFields();
-        JOptionPane.showMessageDialog(this, "Staff record updated successfully.");
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            String sql = "UPDATE staff SET position = ?, salary = ? WHERE staff_id = ?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, position);
+            stmt.setDouble(2, Double.parseDouble(salary));
+            stmt.setInt(3, Integer.parseInt(id));
+            stmt.executeUpdate();
+
+            tableModel.setValueAt(id, selectedRow, 0);
+            tableModel.setValueAt(position, selectedRow, 1);
+            tableModel.setValueAt(salary, selectedRow, 2);
+            clearFields();
+            JOptionPane.showMessageDialog(this, "Staff record updated successfully.");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error updating staff.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private void deleteStaff() {
@@ -155,9 +198,21 @@ public class ManageStaffForm extends JFrame {
             return;
         }
 
-        tableModel.removeRow(selectedRow);
-        clearFields();
-        JOptionPane.showMessageDialog(this, "Staff record deleted successfully.");
+        String id = tableModel.getValueAt(selectedRow, 0).toString();
+
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            String sql = "DELETE FROM staff WHERE staff_id = ?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, Integer.parseInt(id));
+            stmt.executeUpdate();
+
+            tableModel.removeRow(selectedRow);
+            clearFields();
+            JOptionPane.showMessageDialog(this, "Staff record deleted successfully.");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error deleting staff.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private void viewStaff() {
@@ -168,10 +223,22 @@ public class ManageStaffForm extends JFrame {
         }
 
         String id = tableModel.getValueAt(selectedRow, 0).toString();
-        String position = tableModel.getValueAt(selectedRow, 1).toString();
-        String salary = tableModel.getValueAt(selectedRow, 2).toString();
 
-        JOptionPane.showMessageDialog(this, "Staff Details:\nID: " + id + "\nPosition: " + position + "\nSalary: " + salary);
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            String sql = "SELECT * FROM staff WHERE staff_id = ?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, Integer.parseInt(id));
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                String position = rs.getString("position");
+                String salary = String.valueOf(rs.getDouble("salary"));
+                JOptionPane.showMessageDialog(this, "Staff Details:\nID: " + id + "\nPosition: " + position + "\nSalary: " + salary);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error viewing staff.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private void clearFields() {
