@@ -9,10 +9,10 @@ import models.Attendance;
 import database.*;
 import database.signup.AttendaceDAO;
 
-public class StaffAttendanceForm extends JFrame {
+public class AttendanceStaff extends JFrame {
     private JTextField remarkField;
 
-    public StaffAttendanceForm(Staff staff) {
+    public AttendanceStaff(Staff staff) {
         setTitle("Submit Attendance");
         setSize(600, 300); // Larger frame size
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -60,7 +60,7 @@ public class StaffAttendanceForm extends JFrame {
         submitButton.setFont(new Font("SansSerif", Font.PLAIN, 16)); // Smaller font size
         submitButton.setPreferredSize(new Dimension(120, 40)); // Smaller button size
         submitButton.setBackground(new Color(50, 150, 250)); // Blue background
-        submitButton.setForeground(Color.WHITE); // White text
+        submitButton.setForeground(Color.BLUE); // Blue text
         submitButton.setFocusPainted(false); // Remove focus border
         submitButton.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20)); // Padding inside the button
         submitButton.addActionListener(new ActionListener() {
@@ -70,6 +70,22 @@ public class StaffAttendanceForm extends JFrame {
             }
         });
         buttonPanel.add(submitButton);
+
+        JButton backButton = new JButton("Back");
+        backButton.setFont(new Font("SansSerif", Font.PLAIN, 16));
+        backButton.setPreferredSize(new Dimension(120, 40));
+        backButton.setBackground(new Color(50, 150, 50)); // Green background
+        backButton.setForeground(Color.BLUE); // Blue text
+        backButton.setFocusPainted(false);
+        backButton.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+        backButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new StaffForm(staff); // Navigate back to StaffForm
+                dispose();
+            }
+        });
+        buttonPanel.add(backButton);
 
         // Add components to the main panel
         mainPanel.add(headerPanel, BorderLayout.NORTH);
@@ -100,7 +116,7 @@ public class StaffAttendanceForm extends JFrame {
         // Example usage
         // SwingUtilities.invokeLater(() -> {
         //     Staff staff = new Staff(1, "John Doe"); // Replace with actual staff object
-        //     new StaffAttendanceForm(staff);
+        //     new Atte(staff);
         // });
     }
 }
