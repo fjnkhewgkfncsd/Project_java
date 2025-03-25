@@ -11,7 +11,7 @@ import database.FetchData;
 public class ViewStaffAttendance extends JFrame {
     private JButton backButton;
 
-    public ViewStaffAttendance(String staffName, int staffId) {
+    public ViewStaffAttendance(Staff staff) {
         setTitle("View Attendance");
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -49,10 +49,5 @@ public class ViewStaffAttendance extends JFrame {
     // Method to handle the back button action
     private void goBack() {
         this.dispose();
-    }
-
-    public static void main(String[] args) {
-        // Example usage
-        SwingUtilities.invokeLater(() -> new ViewStaffAttendance("John Doe", 1));
     }
 }

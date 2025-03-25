@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import models.*;
 import GUI.Components.ViewStaffAttendance;
+import GUI.Components.ViewlecturerAttendance;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -71,7 +72,7 @@ public class StaffForm extends JFrame {
         viewAttendanceButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new ViewStaffAttendance(staff.getName(), staff.getId()).setVisible(true);
+                new ViewStaffAttendance(staff).setVisible(true);
                 dispose();
             }
         });

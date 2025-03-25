@@ -162,7 +162,7 @@ public class UserForm extends JFrame {
                 inputStrings[inputStrings.length - 2] = major;
                 inputStrings[inputStrings.length - 1] = gen;
             }else if(role.equals("Staff")){
-                String position = positionField.getText().trim();
+                String position = positionField.getText().trim(); // Capture position
                 inputStrings[inputStrings.length - 1] = position;
             }else{
                 String specialization = specializationField.getText().trim();
@@ -183,9 +183,9 @@ public class UserForm extends JFrame {
                 int genInt = Integer.parseInt(gen);
                 Student student = new Student(user,major,genInt);
                 student.signUp(student); 
-            }else if(role.equals("staff")){
+            }else if(role.equals("Staff")){
                 String position = positionField.getText().trim();
-                Staff staff = new Staff(user,position);
+                Staff staff = new Staff(user, position);
                 staff.signUp(staff);
             }else{
                 String specialization = specializationField.getText().trim();

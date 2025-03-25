@@ -6,7 +6,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import models.Staff;
 import models.Attendance;
-import database.AttendanceDAO;
+import database.*;
+import database.signup.AttendaceDAO;
 
 public class StaffAttendanceForm extends JFrame {
     private JTextField remarkField;
@@ -89,11 +90,9 @@ public class StaffAttendanceForm extends JFrame {
             return;
         }
 
-        // Save attendance to the database
-        Attendance attendance = new Attendance(staff.getId(), "Present", remark);
-        AttendanceDAO.insertStaffAttendance(attendance);
-
         JOptionPane.showMessageDialog(this, "Attendance submitted successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+        Attendance attendance = new Attendance(staff.getId(), "Present", remark);
+        AttendaceDAO.insertStaffAttendance(attendance);
         remarkField.setText(""); // Clear the remark field
     }
 

@@ -14,7 +14,8 @@ public class atferLogin {
         }else if(user.getRole().equals("Staff")){
             if(user instanceof Staff) {
                 Staff staff = (Staff) user;
-                new StaffForm(staff).setVisible(true); // Pass the staff object to StaffForm
+                System.err.println(staff.getId());
+                new StaffForm(FetchData.fetchStaff(((Staff) user).getId()));
             }
         }else if (user.getRole().equals("Lecturer")){
             if(user instanceof Lecturer);
