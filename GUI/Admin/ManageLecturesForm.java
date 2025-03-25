@@ -12,34 +12,29 @@ import java.sql.SQLException;
 import database.DatabaseConnection;
 
 public class ManageLecturesForm extends JFrame {
-    private JTextField lectureIdField, courseField, salaryField;
+    private JTextField idField, salaryField;
     private JTable lectureTable;
     private DefaultTableModel tableModel;
-    private JButton backButton; // Add back button
+    private JButton backButton;
 
     public ManageLecturesForm() {
         setTitle("Manage Lectures");
-        setSize(1000, 700); // Adjusted size for better layout
+        setSize(1000, 700);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        // Set background color
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout(10, 10));
-        mainPanel.setBackground(new Color(240, 240, 240)); // Light gray background
+        mainPanel.setBackground(new Color(240, 240, 240));
 
         // Input Panel
-        JPanel inputPanel = new JPanel(new GridLayout(3, 2, 10, 10));
+        JPanel inputPanel = new JPanel(new GridLayout(2, 2, 10, 10));
         inputPanel.setBorder(BorderFactory.createTitledBorder("Lecture Details"));
-        inputPanel.setBackground(new Color(255, 255, 255)); // White background
+        inputPanel.setBackground(new Color(255, 255, 255));
 
         inputPanel.add(new JLabel("Lecture ID:"));
-        lectureIdField = new JTextField(15);
-        inputPanel.add(lectureIdField);
-
-        inputPanel.add(new JLabel("Course:"));
-        courseField = new JTextField(15);
-        inputPanel.add(courseField);
+        idField = new JTextField(15);
+        inputPanel.add(idField);
 
         inputPanel.add(new JLabel("Salary:"));
         salaryField = new JTextField(15);
@@ -48,8 +43,8 @@ public class ManageLecturesForm extends JFrame {
         mainPanel.add(inputPanel, BorderLayout.NORTH);
 
         // Button Panel
-        JPanel buttonPanel = new JPanel(new GridLayout(2, 3, 20, 10)); // Adjust button panel layout for better alignment
-        buttonPanel.setBackground(new Color(240, 240, 240)); // Match main panel background
+        JPanel buttonPanel = new JPanel(new GridLayout(2, 3, 20, 10));
+        buttonPanel.setBackground(new Color(240, 240, 240));
 
         JButton addButton = createStyledButton("Add");
         addButton.addActionListener(new ActionListener() {
@@ -82,12 +77,11 @@ public class ManageLecturesForm extends JFrame {
         viewButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                viewLecture();
+                viewLectures();
             }
         });
         buttonPanel.add(viewButton);
 
-        // Add back button to the button panel
         backButton = createStyledButton("Back");
         backButton.addActionListener(new ActionListener() {
             @Override
@@ -98,61 +92,59 @@ public class ManageLecturesForm extends JFrame {
         });
         buttonPanel.add(backButton);
 
-        // Add button panel to the bottom of the layout
         mainPanel.add(buttonPanel, BorderLayout.SOUTH);
 
         // Table Panel
         JPanel tablePanel = new JPanel(new BorderLayout());
         tablePanel.setBorder(BorderFactory.createTitledBorder("Lecture Records"));
-        tablePanel.setBackground(new Color(255, 255, 255)); // White background
+        tablePanel.setBackground(new Color(255, 255, 255));
 
-        tableModel = new DefaultTableModel(new String[]{"Lecture ID", "Course", "Salary"}, 0);
+        tableModel = new DefaultTableModel(new String[]{"Lecture ID", "Name", "Sex", "Specialization", "Salary"}, 0);
         lectureTable = new JTable(tableModel);
-        lectureTable.setRowHeight(25); // Increase row height for better readability
+        lectureTable.setRowHeight(25);
         JScrollPane scrollPane = new JScrollPane(lectureTable);
         tablePanel.add(scrollPane, BorderLayout.CENTER);
 
-        // Move table panel to the center
         mainPanel.add(tablePanel, BorderLayout.CENTER);
 
-        // Add main panel to the frame
         add(mainPanel);
     }
 
     private JButton createStyledButton(String text) {
         JButton button = new JButton(text);
-        button.setPreferredSize(new Dimension(100, 40)); // Comfortable button size
-        button.setBackground(new Color(70, 130, 180)); // Steel blue background
-        button.setForeground(Color.BLACK); // White text
+        button.setPreferredSize(new Dimension(100, 40));
+        button.setBackground(new Color(70, 130, 180));
+        button.setForeground(Color.BLACK);
         button.setFocusPainted(false);
-        button.setFont(new Font("Arial", Font.BOLD, 14)); // Bold font for better visibility
+        button.setFont(new Font("Arial", Font.BOLD, 14));
         return button;
     }
 
     private void addLecture() {
-        String lectureId = lectureIdField.getText().trim();
-        String course = courseField.getText().trim();
+        String id = idField.getText().trim();
         String salary = salaryField.getText().trim();
 
-        if (lectureId.isEmpty() || course.isEmpty() || salary.isEmpty()) {
+        if (id.isEmpty() || salary.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Please fill in all fields.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
         try (Connection conn = DatabaseConnection.getConnection()) {
-            String sql = "INSERT INTO lecturer (lecturer_id, specialization, salary) VALUES (?, ?, ?)";
+            String sql = "UPDATE lecturer SET salary = ? WHERE lecturer_id = ?";
             PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setInt(1, Integer.parseInt(lectureId));
-            stmt.setString(2, course);
-            stmt.setDouble(3, Double.parseDouble(salary));
-            stmt.executeUpdate();
+            stmt.setDouble(1, Double.parseDouble(salary));
+            stmt.setInt(2, Integer.parseInt(id));
+            int rowsUpdated = stmt.executeUpdate();
 
-            tableModel.addRow(new Object[]{lectureId, course, salary});
+            if (rowsUpdated > 0) {
+                JOptionPane.showMessageDialog(this, "Salary updated successfully.");
+            } else {
+                JOptionPane.showMessageDialog(this, "Lecture ID not found.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
             clearFields();
-            JOptionPane.showMessageDialog(this, "Lecture added successfully.");
         } catch (SQLException e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Error adding lecture.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Error updating salary.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -163,26 +155,23 @@ public class ManageLecturesForm extends JFrame {
             return;
         }
 
-        String lectureId = lectureIdField.getText().trim();
-        String course = courseField.getText().trim();
+        String id = idField.getText().trim();
         String salary = salaryField.getText().trim();
 
-        if (lectureId.isEmpty() || course.isEmpty() || salary.isEmpty()) {
+        if (id.isEmpty() || salary.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Please fill in all fields.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
         try (Connection conn = DatabaseConnection.getConnection()) {
-            String sql = "UPDATE lecturer SET specialization = ?, salary = ? WHERE lecturer_id = ?";
+            String sql = "UPDATE lecturer SET salary = ? WHERE lecturer_id = ?";
             PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setString(1, course);
-            stmt.setDouble(2, Double.parseDouble(salary));
-            stmt.setInt(3, Integer.parseInt(lectureId));
+            stmt.setDouble(1, Double.parseDouble(salary));
+            stmt.setInt(2, Integer.parseInt(id));
             stmt.executeUpdate();
 
-            tableModel.setValueAt(lectureId, selectedRow, 0);
-            tableModel.setValueAt(course, selectedRow, 1);
-            tableModel.setValueAt(salary, selectedRow, 2);
+            tableModel.setValueAt(id, selectedRow, 0);
+            tableModel.setValueAt(salary, selectedRow, 4);
             clearFields();
             JOptionPane.showMessageDialog(this, "Lecture record updated successfully.");
         } catch (SQLException e) {
@@ -198,12 +187,12 @@ public class ManageLecturesForm extends JFrame {
             return;
         }
 
-        String lectureId = tableModel.getValueAt(selectedRow, 0).toString();
+        String id = tableModel.getValueAt(selectedRow, 0).toString();
 
         try (Connection conn = DatabaseConnection.getConnection()) {
             String sql = "DELETE FROM lecturer WHERE lecturer_id = ?";
             PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setInt(1, Integer.parseInt(lectureId));
+            stmt.setInt(1, Integer.parseInt(id));
             stmt.executeUpdate();
 
             tableModel.removeRow(selectedRow);
@@ -215,35 +204,31 @@ public class ManageLecturesForm extends JFrame {
         }
     }
 
-    private void viewLecture() {
-        int selectedRow = lectureTable.getSelectedRow();
-        if (selectedRow == -1) {
-            JOptionPane.showMessageDialog(this, "Please select a lecture record to view.", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        String lectureId = tableModel.getValueAt(selectedRow, 0).toString();
-
+    private void viewLectures() {
         try (Connection conn = DatabaseConnection.getConnection()) {
-            String sql = "SELECT * FROM lecturer WHERE lecturer_id = ?";
+            String sql = "SELECT lecturer.lecturer_id, user.name, user.sex, lecturer.specialization, lecturer.salary " +
+                         "FROM lecturer INNER JOIN user ON lecturer.email = user.email";
             PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setInt(1, Integer.parseInt(lectureId));
             ResultSet rs = stmt.executeQuery();
 
-            if (rs.next()) {
-                String course = rs.getString("specialization");
-                String salary = String.valueOf(rs.getDouble("salary"));
-                JOptionPane.showMessageDialog(this, "Lecture Details:\nLecture ID: " + lectureId + "\nCourse: " + course + "\nSalary: " + salary);
+            tableModel.setRowCount(0);
+            while (rs.next()) {
+                int id = rs.getInt("lecturer_id");
+                String name = rs.getString("name");
+                String sex = rs.getString("sex");
+                String specialization = rs.getString("specialization");
+                double salary = rs.getDouble("salary");
+
+                tableModel.addRow(new Object[]{id, name, sex, specialization, salary});
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Error viewing lecture.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Error retrieving lecture data.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
     private void clearFields() {
-        lectureIdField.setText("");
-        courseField.setText("");
+        idField.setText("");
         salaryField.setText("");
     }
 

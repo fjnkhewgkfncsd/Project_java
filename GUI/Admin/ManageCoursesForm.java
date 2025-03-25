@@ -9,11 +9,14 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import database.DatabaseConnection;
+import javax.swing.table.DefaultTableModel;
 
 public class ManageCoursesForm extends JFrame {
     private JTextField studentIdField, courseIdField, groupField, classroomField, yearField, generationField, departmentField;
     private JTextArea infoTextArea;
     private JButton backButton; // Add back button
+    private JTable coursesTable;
+    private DefaultTableModel tableModel;
 
     public ManageCoursesForm() {
         setTitle("Manage Courses");
@@ -70,7 +73,7 @@ public class ManageCoursesForm extends JFrame {
         infoPanel.add(scrollPane, BorderLayout.CENTER);
 
         // Button Panel
-        JPanel buttonPanel = new JPanel(new GridLayout(1, 3, 20, 10)); // Adjust button panel layout for better alignment
+        JPanel buttonPanel = new JPanel(new GridLayout(1, 4, 20, 10)); // Adjust button panel layout for better alignment
         buttonPanel.setBackground(new Color(240, 240, 240));
 
         JButton assignButton = createStyledButton("Assign Course");
@@ -102,11 +105,35 @@ public class ManageCoursesForm extends JFrame {
         });
         buttonPanel.add(backButton);
 
+        // Add button to view all course assignments
+        JButton viewButton = createStyledButton("View All");
+        viewButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                viewCourses();
+            }
+        });
+        buttonPanel.add(viewButton);
+
         // Add button panel to the bottom of the layout
         mainPanel.add(buttonPanel, BorderLayout.SOUTH);
 
         // Move info panel to the center
         mainPanel.add(infoPanel, BorderLayout.CENTER);
+
+        // Table Panel
+        JPanel tablePanel = new JPanel(new BorderLayout());
+        tablePanel.setBorder(BorderFactory.createTitledBorder("Course Assignments"));
+        tablePanel.setBackground(new Color(255, 255, 255)); // White background
+
+        tableModel = new DefaultTableModel(new String[]{"Student ID", "Course ID", "Group", "Classroom", "Year", "Generation", "Department"}, 0);
+        coursesTable = new JTable(tableModel);
+        coursesTable.setRowHeight(25); // Increase row height for better readability
+        JScrollPane scrollPaneTable = new JScrollPane(coursesTable);
+        tablePanel.add(scrollPaneTable, BorderLayout.CENTER);
+
+        // Move table panel to the center
+        mainPanel.add(tablePanel, BorderLayout.CENTER);
 
         // Add main panel to frame
         add(mainPanel);
@@ -159,5 +186,29 @@ public class ManageCoursesForm extends JFrame {
         generationField.setText("");
         departmentField.setText("");
         infoTextArea.setText("");
+    }
+
+    private void viewCourses() {
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            String sql = "SELECT * FROM courseenrollment";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery();
+
+            tableModel.setRowCount(0); // Clear existing rows
+            while (rs.next()) {
+                int studentId = rs.getInt("student_id");
+                int courseId = rs.getInt("course_id");
+                String group = rs.getString("group");
+                String classroom = rs.getString("classroom");
+                String year = rs.getString("year");
+                String generation = rs.getString("generation");
+                String department = rs.getString("department");
+
+                tableModel.addRow(new Object[]{studentId, courseId, group, classroom, year, generation, department});
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error retrieving course data.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 }
