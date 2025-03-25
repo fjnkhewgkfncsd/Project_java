@@ -14,7 +14,7 @@ public class AttendanceSubmissionGUI extends JFrame {
 
     public AttendanceSubmissionGUI(Student student, int courseId) {
         setTitle("Submit Attendance");
-        setSize(600, 300); // Larger frame size
+        setSize(800, 500); // Larger frame size
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
 
@@ -77,6 +77,20 @@ public class AttendanceSubmissionGUI extends JFrame {
         mainPanel.add(buttonPanel, BorderLayout.SOUTH);
 
         // Add main panel to the frame
+        JButton backButton = new JButton("Back");
+        backButton.setFont(new Font("SansSerif", Font.PLAIN, 16));
+        backButton.setPreferredSize(new Dimension(120, 40));
+        backButton.setBackground(new Color(50, 150, 50));
+        backButton.setForeground(Color.blue);
+        backButton.setFocusPainted(false);
+        backButton.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+        backButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+            }
+        });
+        buttonPanel.add(backButton);
         add(mainPanel);
 
         setVisible(true);

@@ -70,6 +70,21 @@ public class AttendanceLecturer extends JFrame {
             }
         });
         buttonPanel.add(submitButton);
+        JButton backButton = new JButton("Back");
+        backButton.setFont(new Font("SansSerif", Font.PLAIN, 16));
+        backButton.setPreferredSize(new Dimension(120, 40));
+        backButton.setBackground(new Color(50, 150, 50));
+        backButton.setForeground(Color.blue);
+        backButton.setFocusPainted(false);
+        backButton.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+        backButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new LecturerForm(lecturer);
+                dispose();
+            }
+        });
+        buttonPanel.add(backButton);
 
         // Add components to the main panel
         mainPanel.add(headerPanel, BorderLayout.NORTH);
