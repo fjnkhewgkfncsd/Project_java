@@ -4,118 +4,105 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import GUI.UserForm; // Import the UserForm class
+import database.DatabaseConnection;
 
 public class AdminForm extends JFrame {
-    private JButton manageStaffButton, manageStudentsButton, manageCoursesButton, manageLecturesButton;
-    private JButton backButton; // Add back button
+    private JButton manageStaffButton, manageStudentsButton, manageCoursesButton, manageLecturesButton, registerButton, backButton;
 
     public AdminForm() {
         setTitle("Admin Dashboard");
-        setSize(800, 600); // Increase the window size
+        setSize(900, 550);
+        setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null); // Center the window on the screen
+        setLocationRelativeTo(null);
+        
+        JPanel mainPanel = new JPanel(new BorderLayout());
+        mainPanel.setBackground(Color.WHITE);
 
-        JPanel panel = new JPanel();
-        panel.setLayout(new GridBagLayout()); // Use GridBagLayout for better alignment
-        panel.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30)); // Add more padding around the panel
-        panel.setBackground(new Color(240, 240, 240)); // Set a light background color
-
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(15, 15, 15, 15); // Add more padding between components
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-
-        // Add a title label
+        // Left panel (Sidebar)
+        JPanel sidebar = new JPanel();
+        sidebar.setBackground(new Color(45, 52, 54));
+        sidebar.setLayout(new BoxLayout(sidebar, BoxLayout.Y_AXIS));
+        sidebar.setPreferredSize(new Dimension(200, getHeight()));
+        
         JLabel titleLabel = new JLabel("Admin Dashboard", JLabel.CENTER);
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 32)); // Increase font size for the title
-        titleLabel.setForeground(new Color(50, 50, 150)); // Set a custom color for the title
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.gridwidth = 2; // Span the title across two columns
-        panel.add(titleLabel, gbc);
+        titleLabel.setForeground(Color.WHITE);
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // Initialize buttons
-        manageStaffButton = new JButton("Manage Staff");
-        manageStudentsButton = new JButton("Manage Students");
-        manageCoursesButton = new JButton("Manage Courses");
-        manageLecturesButton = new JButton("Manage Lectures");
-        backButton = new JButton("Back"); // Initialize back button
+        Font buttonFont = new Font("Arial", Font.BOLD, 14);
+        manageStaffButton = createSidebarButton("Manage Staff", buttonFont);
+        manageStudentsButton = createSidebarButton("Manage Students", buttonFont);
+        manageCoursesButton = createSidebarButton("Manage Courses", buttonFont);
+        manageLecturesButton = createSidebarButton("Manage Lectures", buttonFont);
+        registerButton = createSidebarButton("Register", buttonFont);
+        backButton = createSidebarButton("Back", buttonFont);
 
-        // Set font size and dimensions for the buttons
-        Font buttonFont = new Font("Arial", Font.BOLD, 22); // Increase font size
-        Dimension buttonSize = new Dimension(300, 50); // Increase button size
-        manageStaffButton.setFont(buttonFont);
-        manageStaffButton.setPreferredSize(buttonSize);
-        manageStudentsButton.setFont(buttonFont);
-        manageStudentsButton.setPreferredSize(buttonSize);
-        manageCoursesButton.setFont(buttonFont);
-        manageCoursesButton.setPreferredSize(buttonSize);
-        manageLecturesButton.setFont(buttonFont);
-        manageLecturesButton.setPreferredSize(buttonSize);
-        backButton.setFont(buttonFont);
-        backButton.setPreferredSize(buttonSize);
+        sidebar.add(Box.createVerticalStrut(20));
+        sidebar.add(titleLabel);
+        sidebar.add(Box.createVerticalStrut(30));
+        sidebar.add(manageStaffButton);
+        sidebar.add(Box.createVerticalStrut(15)); // Adjust spacing for consistency
+        sidebar.add(manageStudentsButton);
+        sidebar.add(Box.createVerticalStrut(15));
+        sidebar.add(manageCoursesButton);
+        sidebar.add(Box.createVerticalStrut(15));
+        sidebar.add(manageLecturesButton);
+        sidebar.add(Box.createVerticalStrut(15));
+        sidebar.add(backButton);
+        sidebar.add(Box.createVerticalGlue()); // Push the register button to the bottom
+        sidebar.add(Box.createVerticalStrut(15));
+        sidebar.add(registerButton);
 
-        // Add buttons to the panel (two buttons per row)
-        gbc.gridwidth = 1; // Reset grid width
-        gbc.gridy = 1;
-        gbc.gridx = 0;
-        panel.add(manageStaffButton, gbc);
-        gbc.gridx = 1;
-        panel.add(manageStudentsButton, gbc);
-        gbc.gridy = 2;
-        gbc.gridx = 0;
-        panel.add(manageCoursesButton, gbc);
-        gbc.gridx = 1;
-        panel.add(manageLecturesButton, gbc);
-        gbc.gridy = 3; // Place back button below other buttons
-        gbc.gridx = 0;
-        gbc.gridwidth = 2; // Span across two columns
-        panel.add(backButton, gbc);
-
-        add(panel);
-
-        manageStaffButton.addActionListener(new ActionListener() {
+        // Right panel (Main content area)
+        JPanel contentPanel = new JPanel() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                // Open staff management form
-                new ManageStaffForm().setVisible(true);
-                dispose();
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                Graphics2D g2d = (Graphics2D) g;
+                GradientPaint gp = new GradientPaint(0, 0, new Color(0, 172, 237), getWidth(), getHeight(), new Color(0, 102, 204));
+                g2d.setPaint(gp);
+                g2d.fillRect(0, 0, getWidth(), getHeight());
             }
-        });
+        };
+        contentPanel.setLayout(new BorderLayout());
 
-        manageStudentsButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Open student management form
-                new ManageStudentsForm().setVisible(true);
-                dispose();
-            }
-        });
+        JLabel welcomeLabel = new JLabel("Welcome, School Management", JLabel.CENTER);
+        welcomeLabel.setFont(new Font("Arial", Font.BOLD, 28));
+        welcomeLabel.setForeground(Color.WHITE);
+        contentPanel.add(welcomeLabel, BorderLayout.CENTER);
 
-        manageCoursesButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Open course management form
-                new ManageCoursesForm().setVisible(true);
-                dispose();
-            }
-        });
+        mainPanel.add(sidebar, BorderLayout.WEST);
+        mainPanel.add(contentPanel, BorderLayout.CENTER);
 
-        manageLecturesButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Open lecture management form
-                new ManageLecturesForm().setVisible(true);
-                dispose();
-            }
-        });
+        add(mainPanel);
 
-        backButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Close the AdminForm
-                dispose();
-            }
-        });
+        // Button actions
+        manageStaffButton.addActionListener(e -> openNewForm(new ManageStaffForm()));
+        manageStudentsButton.addActionListener(e -> openNewForm(new ManageStudentsForm()));
+        manageCoursesButton.addActionListener(e -> openNewForm(new ManageCoursesForm()));
+        manageLecturesButton.addActionListener(e -> openNewForm(new ManageLecturesForm()));
+        registerButton.addActionListener(e -> openNewForm(new UserForm()));
+        backButton.addActionListener(e -> dispose());
+    }
+
+    private JButton createSidebarButton(String text, Font font) {
+        JButton button = new JButton(text);
+        button.setFont(font);
+        button.setForeground(Color.WHITE);
+        button.setBackground(new Color(55, 66, 75));
+        button.setFocusPainted(false);
+        button.setAlignmentX(Component.CENTER_ALIGNMENT);
+        button.setPreferredSize(new Dimension(180, 45)); // Ensure uniform button size
+        button.setMaximumSize(new Dimension(180, 45)); // Ensure consistent maximum size
+        button.setBorder(BorderFactory.createLineBorder(new Color(100, 100, 100), 2));
+        return button;
+    }
+
+    private void openNewForm(JFrame form) {
+        form.setVisible(true);
+        dispose();
     }
 
     public static void main(String[] args) {

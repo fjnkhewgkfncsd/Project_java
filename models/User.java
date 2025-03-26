@@ -41,6 +41,10 @@ public class User implements Manage {
             String[] inputStrings = {email,password};
             new CheckEmptyStringException(inputStrings);
             result = FetchData.validateLogin(email, password);
+            if(result == null){
+                System.out.println("�� Login failed. Please check your email and password.");
+                return null;
+            }
         }catch(CheckEmptyStringException e){
             System.out.println(e.getMessage());
             return null;

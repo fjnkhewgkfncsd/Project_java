@@ -4,14 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import models.*;
-import GUI.Components.ViewStaffAttendance;
-import GUI.Components.ViewlecturerAttendance;
-
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import models.Staff;
+import GUI.Components.ViewStaffAttendance;
 
 public class StaffForm extends JFrame {
     private JButton submitAttendanceButton, viewAttendanceButton;
@@ -31,7 +25,7 @@ public class StaffForm extends JFrame {
 
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(2, 1, 10, 10));
-        panel.setBackground(new Color(44, 62, 80)); // Dark background
+        panel.setBackground(new Color(34, 45, 65)); // Updated dark background
 
         submitAttendanceButton = new JButton("Submit Attendance");
         viewAttendanceButton = new JButton("View Attendance");
@@ -47,10 +41,10 @@ public class StaffForm extends JFrame {
         viewAttendanceButton.setPreferredSize(buttonSize);
 
         // Button colors
-        submitAttendanceButton.setBackground(new Color(52, 152, 219)); // Blue
-        submitAttendanceButton.setForeground(Color.WHITE);
-        viewAttendanceButton.setBackground(new Color(46, 204, 113)); // Green
-        viewAttendanceButton.setForeground(Color.WHITE);
+        submitAttendanceButton.setBackground(new Color(241, 196, 15)); // Yellow
+        submitAttendanceButton.setForeground(Color.BLACK);
+        viewAttendanceButton.setBackground(new Color(39, 174, 96)); // Green
+        viewAttendanceButton.setForeground(Color.BLACK);
 
         // Border styling
         submitAttendanceButton.setFocusPainted(false);
@@ -64,7 +58,7 @@ public class StaffForm extends JFrame {
         submitAttendanceButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new StaffAttendanceForm(staff).setVisible(true); // Pass staff object
+                new AttendanceStaff(staff).setVisible(true); // Pass staff object
                 dispose();
             }
         });
@@ -78,5 +72,10 @@ public class StaffForm extends JFrame {
         });
 
         setVisible(true);
+    }
+
+    public static void main(String[] args) {
+        // Example usage
+        // SwingUtilities.invokeLater(() -> new StaffForm(new Staff()).setVisible(true));
     }
 }

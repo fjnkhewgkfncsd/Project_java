@@ -291,7 +291,7 @@ public class FetchData {
             System.out.println("❌ Failed to connect to the database.");
             return null;
         }
-        String sql = "SELECT * FROM staff_attendance WHERE person_id = ?";
+        String sql = "SELECT * FROM Staff_Attendance WHERE sta_id = ?";
         List<Attendance> attendances = new ArrayList<>();
 
         try (PreparedStatement statement = conn.prepareStatement(sql)) {
@@ -302,7 +302,7 @@ public class FetchData {
                 Attendance attendance = new Attendance(
                     resultSet.getDate("attendance_date").toLocalDate(),
                     resultSet.getTime("attendance_time").toLocalTime(),
-                    resultSet.getInt("person_id"),
+                    resultSet.getInt("sta_id"),
                     resultSet.getString("status"),
                     resultSet.getString("remark")
                 );

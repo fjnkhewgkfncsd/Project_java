@@ -1,20 +1,17 @@
 package GUI.Admin;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import models.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import database.DatabaseConnection;
-import javax.swing.table.DefaultTableModel;
 
 public class ManageCoursesForm extends JFrame {
     private JTextField studentIdField, courseIdField, groupField, classroomField, yearField, generationField, departmentField;
-    private JTextArea infoTextArea;
-    private JButton backButton; // Add back button
     private JTable coursesTable;
     private DefaultTableModel tableModel;
 
@@ -24,124 +21,123 @@ public class ManageCoursesForm extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        // Main Panel
-        JPanel mainPanel = new JPanel(new BorderLayout(10, 10));
-        mainPanel.setBackground(new Color(240, 240, 240));
+        // Main Layout
+        JPanel mainPanel = new JPanel(new BorderLayout());
+        mainPanel.add(createSidebar(), BorderLayout.WEST);
+        mainPanel.add(createContentPanel(), BorderLayout.CENTER);
 
-        // Input Panel
+        add(mainPanel);
+    }
+
+    private JPanel createSidebar() {
+        JPanel sidebar = new JPanel();
+        sidebar.setBackground(new Color(45, 52, 54));
+        sidebar.setLayout(new BoxLayout(sidebar, BoxLayout.Y_AXIS));
+        sidebar.setPreferredSize(new Dimension(200, getHeight()));
+
+        JLabel titleLabel = new JLabel("Manage Courses", JLabel.CENTER);
+        titleLabel.setForeground(Color.WHITE);
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        JButton backButton = createSidebarButton("Back");
+        backButton.addActionListener(e -> {
+            new AdminForm().setVisible(true);
+            dispose();
+        });
+
+        sidebar.add(Box.createVerticalStrut(20));
+        sidebar.add(titleLabel);
+        sidebar.add(Box.createVerticalGlue());
+        sidebar.add(backButton);
+
+        return sidebar;
+    }
+
+    private JPanel createContentPanel() {
+        JPanel contentPanel = new JPanel(new BorderLayout(10, 10));
+        contentPanel.add(createInputPanel(), BorderLayout.NORTH);
+        contentPanel.add(createTablePanel(), BorderLayout.CENTER);
+        contentPanel.add(createButtonPanel(), BorderLayout.SOUTH);
+        return contentPanel;
+    }
+
+    private JPanel createInputPanel() {
         JPanel inputPanel = new JPanel(new GridLayout(7, 2, 10, 10));
-        inputPanel.setBorder(BorderFactory.createTitledBorder("Course Assignment Details"));
+        inputPanel.setBorder(BorderFactory.createTitledBorder("Course Details"));
         inputPanel.setBackground(new Color(255, 255, 255));
 
         inputPanel.add(new JLabel("Student ID:"));
-        studentIdField = new JTextField();
+        studentIdField = new JTextField(15);
         inputPanel.add(studentIdField);
 
         inputPanel.add(new JLabel("Course ID:"));
-        courseIdField = new JTextField();
+        courseIdField = new JTextField(15);
         inputPanel.add(courseIdField);
 
         inputPanel.add(new JLabel("Group:"));
-        groupField = new JTextField();
+        groupField = new JTextField(15);
         inputPanel.add(groupField);
 
         inputPanel.add(new JLabel("Classroom:"));
-        classroomField = new JTextField();
+        classroomField = new JTextField(15);
         inputPanel.add(classroomField);
 
         inputPanel.add(new JLabel("Year:"));
-        yearField = new JTextField();
+        yearField = new JTextField(15);
         inputPanel.add(yearField);
 
         inputPanel.add(new JLabel("Generation:"));
-        generationField = new JTextField();
+        generationField = new JTextField(15);
         inputPanel.add(generationField);
 
         inputPanel.add(new JLabel("Department:"));
-        departmentField = new JTextField();
+        departmentField = new JTextField(15);
         inputPanel.add(departmentField);
 
-        mainPanel.add(inputPanel, BorderLayout.NORTH);
+        return inputPanel;
+    }
 
-        // Info Display Panel
-        JPanel infoPanel = new JPanel(new BorderLayout());
-        infoPanel.setBorder(BorderFactory.createTitledBorder("Information"));
-        infoTextArea = new JTextArea(10, 50);
-        infoTextArea.setEditable(false);
-        infoTextArea.setFont(new Font("Arial", Font.PLAIN, 14));
-        JScrollPane scrollPane = new JScrollPane(infoTextArea);
-        infoPanel.add(scrollPane, BorderLayout.CENTER);
-
-        // Button Panel
-        JPanel buttonPanel = new JPanel(new GridLayout(1, 4, 20, 10)); // Adjust button panel layout for better alignment
-        buttonPanel.setBackground(new Color(240, 240, 240));
-
-        JButton assignButton = createStyledButton("Assign Course");
-        assignButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                assignCourse();
-            }
-        });
-        buttonPanel.add(assignButton);
-
-        JButton clearButton = createStyledButton("Clear Fields");
-        clearButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                clearFields();
-            }
-        });
-        buttonPanel.add(clearButton);
-
-        // Add back button to the button panel
-        backButton = createStyledButton("Back");
-        backButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                new AdminForm().setVisible(true);
-                dispose();
-            }
-        });
-        buttonPanel.add(backButton);
-
-        // Add button to view all course assignments
-        JButton viewButton = createStyledButton("View All");
-        viewButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                viewCourses();
-            }
-        });
-        buttonPanel.add(viewButton);
-
-        // Add button panel to the bottom of the layout
-        mainPanel.add(buttonPanel, BorderLayout.SOUTH);
-
-        // Move info panel to the center
-        mainPanel.add(infoPanel, BorderLayout.CENTER);
-
-        // Table Panel
+    private JPanel createTablePanel() {
         JPanel tablePanel = new JPanel(new BorderLayout());
-        tablePanel.setBorder(BorderFactory.createTitledBorder("Course Assignments"));
-        tablePanel.setBackground(new Color(255, 255, 255)); // White background
+        tablePanel.setBorder(BorderFactory.createTitledBorder("Course Records"));
+        tablePanel.setBackground(new Color(255, 255, 255));
 
         tableModel = new DefaultTableModel(new String[]{"Student ID", "Course ID", "Group", "Classroom", "Year", "Generation", "Department"}, 0);
         coursesTable = new JTable(tableModel);
-        coursesTable.setRowHeight(25); // Increase row height for better readability
-        JScrollPane scrollPaneTable = new JScrollPane(coursesTable);
-        tablePanel.add(scrollPaneTable, BorderLayout.CENTER);
+        coursesTable.setRowHeight(25);
+        JScrollPane scrollPane = new JScrollPane(coursesTable);
+        tablePanel.add(scrollPane, BorderLayout.CENTER);
 
-        // Move table panel to the center
-        mainPanel.add(tablePanel, BorderLayout.CENTER);
+        return tablePanel;
+    }
 
-        // Add main panel to frame
-        add(mainPanel);
+    private JPanel createButtonPanel() {
+        JPanel buttonPanel = new JPanel(new GridLayout(1, 4, 10, 10));
+        buttonPanel.setBackground(new Color(240, 240, 240));
+
+        JButton addButton = createStyledButton("Add");
+        addButton.addActionListener(e -> addCourse());
+        buttonPanel.add(addButton);
+
+        JButton editButton = createStyledButton("Edit");
+        editButton.addActionListener(e -> editCourse());
+        buttonPanel.add(editButton);
+
+        JButton deleteButton = createStyledButton("Delete");
+        deleteButton.addActionListener(e -> deleteCourse());
+        buttonPanel.add(deleteButton);
+
+        JButton viewButton = createStyledButton("View");
+        viewButton.addActionListener(e -> viewCourses());
+        buttonPanel.add(viewButton);
+
+        return buttonPanel;
     }
 
     private JButton createStyledButton(String text) {
         JButton button = new JButton(text);
-        button.setPreferredSize(new Dimension(150, 40));
+        button.setPreferredSize(new Dimension(100, 40));
         button.setBackground(new Color(70, 130, 180));
         button.setForeground(Color.BLACK);
         button.setFocusPainted(false);
@@ -149,7 +145,20 @@ public class ManageCoursesForm extends JFrame {
         return button;
     }
 
-    private void assignCourse() {
+    private JButton createSidebarButton(String text) {
+        JButton button = new JButton(text);
+        button.setFont(new Font("Arial", Font.BOLD, 14));
+        button.setForeground(Color.WHITE);
+        button.setBackground(new Color(55, 66, 75));
+        button.setFocusPainted(false);
+        button.setAlignmentX(Component.CENTER_ALIGNMENT);
+        button.setPreferredSize(new Dimension(180, 45));
+        button.setMaximumSize(new Dimension(180, 45));
+        button.setBorder(BorderFactory.createLineBorder(new Color(100, 100, 100), 2));
+        return button;
+    }
+
+    private void addCourse() {
         String studentId = studentIdField.getText().trim();
         String courseId = courseIdField.getText().trim();
         String group = groupField.getText().trim();
@@ -164,28 +173,88 @@ public class ManageCoursesForm extends JFrame {
         }
 
         try (Connection conn = DatabaseConnection.getConnection()) {
-            String sql = "INSERT INTO courseenrollment (student_id, course_id) VALUES (?, ?)";
+            String sql = "INSERT INTO courseenrollment (student_id, course_id, group, classroom, year, generation, department) VALUES (?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setInt(1, Integer.parseInt(studentId));
             stmt.setInt(2, Integer.parseInt(courseId));
+            stmt.setString(3, group);
+            stmt.setString(4, classroom);
+            stmt.setString(5, year);
+            stmt.setString(6, generation);
+            stmt.setString(7, department);
             stmt.executeUpdate();
 
-            JOptionPane.showMessageDialog(this, "Course assigned successfully!");
+            JOptionPane.showMessageDialog(this, "Course added successfully!");
+            viewCourses(); // Refresh table
         } catch (SQLException e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Error assigning course.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Error adding course.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
-    private void clearFields() {
-        studentIdField.setText("");
-        courseIdField.setText("");
-        groupField.setText("");
-        classroomField.setText("");
-        yearField.setText("");
-        generationField.setText("");
-        departmentField.setText("");
-        infoTextArea.setText("");
+    private void editCourse() {
+        int selectedRow = coursesTable.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Please select a course to edit.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        String studentId = studentIdField.getText().trim();
+        String courseId = courseIdField.getText().trim();
+        String group = groupField.getText().trim();
+        String classroom = classroomField.getText().trim();
+        String year = yearField.getText().trim();
+        String generation = generationField.getText().trim();
+        String department = departmentField.getText().trim();
+
+        if (studentId.isEmpty() || courseId.isEmpty() || group.isEmpty() || classroom.isEmpty() || year.isEmpty() || generation.isEmpty() || department.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please fill in all fields.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            String sql = "UPDATE courseenrollment SET group = ?, classroom = ?, year = ?, generation = ?, department = ? WHERE student_id = ? AND course_id = ?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, group);
+            stmt.setString(2, classroom);
+            stmt.setString(3, year);
+            stmt.setString(4, generation);
+            stmt.setString(5, department);
+            stmt.setInt(6, Integer.parseInt(studentId));
+            stmt.setInt(7, Integer.parseInt(courseId));
+            stmt.executeUpdate();
+
+            JOptionPane.showMessageDialog(this, "Course updated successfully!");
+            viewCourses(); // Refresh table
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error updating course.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void deleteCourse() {
+        int selectedRow = coursesTable.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Please select a course to delete.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        int studentId = (int) tableModel.getValueAt(selectedRow, 0);
+        int courseId = (int) tableModel.getValueAt(selectedRow, 1);
+
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            String sql = "DELETE FROM courseenrollment WHERE student_id = ? AND course_id = ?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, studentId);
+            stmt.setInt(2, courseId);
+            stmt.executeUpdate();
+
+            JOptionPane.showMessageDialog(this, "Course deleted successfully!");
+            viewCourses(); // Refresh table
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error deleting course.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private void viewCourses() {
@@ -211,4 +280,8 @@ public class ManageCoursesForm extends JFrame {
             JOptionPane.showMessageDialog(this, "Error retrieving course data.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
+
+    // public static void main(String[] args) {
+    //     SwingUtilities.invokeLater(() -> new ManageCoursesForm().setVisible(true));
+    // }
 }

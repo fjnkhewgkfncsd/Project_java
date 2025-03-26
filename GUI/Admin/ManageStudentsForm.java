@@ -12,10 +12,9 @@ import java.sql.SQLException;
 import database.DatabaseConnection;
 
 public class ManageStudentsForm extends JFrame {
-    private JTextField idField, nameField, majorField, schoolFeeField;
+    private JTextField idField, majorField, schoolFeeField; // Removed nameField
     private JTable studentTable;
     private DefaultTableModel tableModel;
-    private JButton backButton;
 
     public ManageStudentsForm() {
         setTitle("Manage Students");
@@ -23,11 +22,48 @@ public class ManageStudentsForm extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        JPanel mainPanel = new JPanel();
-        mainPanel.setLayout(new BorderLayout(10, 10));
-        mainPanel.setBackground(new Color(240, 240, 240));
+        // Main Layout
+        JPanel mainPanel = new JPanel(new BorderLayout());
+        mainPanel.add(createSidebar(), BorderLayout.WEST);
+        mainPanel.add(createContentPanel(), BorderLayout.CENTER);
 
-        // Input Panel
+        add(mainPanel);
+    }
+
+    private JPanel createSidebar() {
+        JPanel sidebar = new JPanel();
+        sidebar.setBackground(new Color(45, 52, 54));
+        sidebar.setLayout(new BoxLayout(sidebar, BoxLayout.Y_AXIS));
+        sidebar.setPreferredSize(new Dimension(200, getHeight()));
+
+        JLabel titleLabel = new JLabel("Manage Students", JLabel.CENTER);
+        titleLabel.setForeground(Color.WHITE);
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        JButton backButton = createSidebarButton("Back");
+        backButton.addActionListener(e -> {
+            new AdminForm().setVisible(true);
+            dispose();
+        });
+
+        sidebar.add(Box.createVerticalStrut(20));
+        sidebar.add(titleLabel);
+        sidebar.add(Box.createVerticalGlue());
+        sidebar.add(backButton);
+
+        return sidebar;
+    }
+
+    private JPanel createContentPanel() {
+        JPanel contentPanel = new JPanel(new BorderLayout(10, 10));
+        contentPanel.add(createInputPanel(), BorderLayout.NORTH);
+        contentPanel.add(createTablePanel(), BorderLayout.CENTER);
+        contentPanel.add(createButtonPanel(), BorderLayout.SOUTH);
+        return contentPanel;
+    }
+
+    private JPanel createInputPanel() {
         JPanel inputPanel = new JPanel(new GridLayout(4, 2, 10, 10));
         inputPanel.setBorder(BorderFactory.createTitledBorder("Student Details"));
         inputPanel.setBackground(new Color(255, 255, 255));
@@ -35,10 +71,6 @@ public class ManageStudentsForm extends JFrame {
         inputPanel.add(new JLabel("Student ID:"));
         idField = new JTextField(15);
         inputPanel.add(idField);
-
-        inputPanel.add(new JLabel("Name:"));
-        nameField = new JTextField(15);
-        inputPanel.add(nameField);
 
         inputPanel.add(new JLabel("Major:"));
         majorField = new JTextField(15);
@@ -48,61 +80,10 @@ public class ManageStudentsForm extends JFrame {
         schoolFeeField = new JTextField(15);
         inputPanel.add(schoolFeeField);
 
-        mainPanel.add(inputPanel, BorderLayout.NORTH);
+        return inputPanel;
+    }
 
-        // Button Panel
-        JPanel buttonPanel = new JPanel(new GridLayout(2, 3, 20, 10));
-        buttonPanel.setBackground(new Color(240, 240, 240));
-
-        JButton addButton = createStyledButton("Add");
-        addButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                addStudent();
-            }
-        });
-        buttonPanel.add(addButton);
-
-        JButton editButton = createStyledButton("Edit");
-        editButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                editStudent();
-            }
-        });
-        buttonPanel.add(editButton);
-
-        JButton deleteButton = createStyledButton("Delete");
-        deleteButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                deleteStudent();
-            }
-        });
-        buttonPanel.add(deleteButton);
-
-        JButton viewButton = createStyledButton("View");
-        viewButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                viewStudents();
-            }
-        });
-        buttonPanel.add(viewButton);
-
-        backButton = createStyledButton("Back");
-        backButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                new AdminForm().setVisible(true);
-                dispose();
-            }
-        });
-        buttonPanel.add(backButton);
-
-        mainPanel.add(buttonPanel, BorderLayout.SOUTH);
-
-        // Table Panel
+    private JPanel createTablePanel() {
         JPanel tablePanel = new JPanel(new BorderLayout());
         tablePanel.setBorder(BorderFactory.createTitledBorder("Student Records"));
         tablePanel.setBackground(new Color(255, 255, 255));
@@ -113,9 +94,30 @@ public class ManageStudentsForm extends JFrame {
         JScrollPane scrollPane = new JScrollPane(studentTable);
         tablePanel.add(scrollPane, BorderLayout.CENTER);
 
-        mainPanel.add(tablePanel, BorderLayout.CENTER);
+        return tablePanel;
+    }
 
-        add(mainPanel);
+    private JPanel createButtonPanel() {
+        JPanel buttonPanel = new JPanel(new GridLayout(1, 4, 10, 10));
+        buttonPanel.setBackground(new Color(240, 240, 240));
+
+        JButton addButton = createStyledButton("Add");
+        addButton.addActionListener(e -> addStudent());
+        buttonPanel.add(addButton);
+
+        JButton editButton = createStyledButton("Edit");
+        editButton.addActionListener(e -> editStudent());
+        buttonPanel.add(editButton);
+
+        JButton deleteButton = createStyledButton("Delete");
+        deleteButton.addActionListener(e -> deleteStudent());
+        buttonPanel.add(deleteButton);
+
+        JButton viewButton = createStyledButton("View");
+        viewButton.addActionListener(e -> viewStudents());
+        buttonPanel.add(viewButton);
+
+        return buttonPanel;
     }
 
     private JButton createStyledButton(String text) {
@@ -128,27 +130,38 @@ public class ManageStudentsForm extends JFrame {
         return button;
     }
 
+    private JButton createSidebarButton(String text) {
+        JButton button = new JButton(text);
+        button.setFont(new Font("Arial", Font.BOLD, 14));
+        button.setForeground(Color.WHITE);
+        button.setBackground(new Color(55, 66, 75));
+        button.setFocusPainted(false);
+        button.setAlignmentX(Component.CENTER_ALIGNMENT);
+        button.setPreferredSize(new Dimension(180, 45));
+        button.setMaximumSize(new Dimension(180, 45));
+        button.setBorder(BorderFactory.createLineBorder(new Color(100, 100, 100), 2));
+        return button;
+    }
+
     private void addStudent() {
         String id = idField.getText().trim();
-        String name = nameField.getText().trim();
         String major = majorField.getText().trim();
         String schoolFee = schoolFeeField.getText().trim();
 
-        if (id.isEmpty() || name.isEmpty() || major.isEmpty() || schoolFee.isEmpty()) {
+        if (id.isEmpty() || major.isEmpty() || schoolFee.isEmpty()) { // Removed name validation
             JOptionPane.showMessageDialog(this, "Please fill in all fields.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
         try (Connection conn = DatabaseConnection.getConnection()) {
-            String sql = "INSERT INTO student (id, name, major, school_fee) VALUES (?, ?, ?, ?)";
+            String sql = "INSERT INTO student (id, major, school_fee) VALUES (?, ?, ?)"; // Removed name from SQL
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setInt(1, Integer.parseInt(id));
-            stmt.setString(2, name);
-            stmt.setString(3, major);
-            stmt.setDouble(4, Double.parseDouble(schoolFee));
+            stmt.setString(2, major);
+            stmt.setDouble(3, Double.parseDouble(schoolFee));
             stmt.executeUpdate();
 
-            tableModel.addRow(new Object[]{id, name, "N/A", major, schoolFee});
+            tableModel.addRow(new Object[]{id, "N/A", "N/A", major, schoolFee}); // Removed name from table row
             clearFields();
             JOptionPane.showMessageDialog(this, "Student added successfully.");
         } catch (SQLException e) {
@@ -165,28 +178,25 @@ public class ManageStudentsForm extends JFrame {
         }
 
         String id = idField.getText().trim();
-        String name = nameField.getText().trim();
         String major = majorField.getText().trim();
         String schoolFee = schoolFeeField.getText().trim();
 
-        if (id.isEmpty() || name.isEmpty() || major.isEmpty() || schoolFee.isEmpty()) {
+        if (id.isEmpty() || major.isEmpty() || schoolFee.isEmpty()) { // Removed name validation
             JOptionPane.showMessageDialog(this, "Please fill in all fields.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
         try (Connection conn = DatabaseConnection.getConnection()) {
-            String sql = "UPDATE student SET name = ?, major = ?, school_fee = ? WHERE id = ?";
+            String sql = "UPDATE student SET major = ?, school_fee = ? WHERE id = ?"; // Removed name from SQL
             PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setString(1, name);
-            stmt.setString(2, major);
-            stmt.setDouble(3, Double.parseDouble(schoolFee));
-            stmt.setInt(4, Integer.parseInt(id));
+            stmt.setString(1, major);
+            stmt.setDouble(2, Double.parseDouble(schoolFee));
+            stmt.setInt(3, Integer.parseInt(id));
             stmt.executeUpdate();
 
             tableModel.setValueAt(id, selectedRow, 0);
-            tableModel.setValueAt(name, selectedRow, 1);
             tableModel.setValueAt(major, selectedRow, 3);
-            tableModel.setValueAt(schoolFee, selectedRow, 4);
+            tableModel.setValueAt(schoolFee, selectedRow, 4); // Removed name from table update
             clearFields();
             JOptionPane.showMessageDialog(this, "Student record updated successfully.");
         } catch (SQLException e) {
@@ -221,20 +231,19 @@ public class ManageStudentsForm extends JFrame {
 
     private void viewStudents() {
         try (Connection conn = DatabaseConnection.getConnection()) {
-            String sql = "SELECT student.id, user.name, user.sex, student.major, student.school_fee " +
-                         "FROM student INNER JOIN user ON student.email = user.email";
+            String sql = "SELECT student.id, user.sex, student.major, student.school_fee " +
+                         "FROM student INNER JOIN user ON student.email = user.email"; // Removed name from SQL
             PreparedStatement stmt = conn.prepareStatement(sql);
             ResultSet rs = stmt.executeQuery();
 
             tableModel.setRowCount(0);
             while (rs.next()) {
                 int id = rs.getInt("id");
-                String name = rs.getString("name");
                 String sex = rs.getString("sex");
                 String major = rs.getString("major");
                 double schoolFee = rs.getDouble("school_fee");
 
-                tableModel.addRow(new Object[]{id, name, sex, major, schoolFee});
+                tableModel.addRow(new Object[]{id, "N/A", sex, major, schoolFee}); // Removed name from table row
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -244,12 +253,11 @@ public class ManageStudentsForm extends JFrame {
 
     private void clearFields() {
         idField.setText("");
-        nameField.setText("");
         majorField.setText("");
-        schoolFeeField.setText("");
+        schoolFeeField.setText(""); // Removed nameField clearing
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new ManageStudentsForm().setVisible(true));
-    }
+    // public static void main(String[] args) {
+    //     SwingUtilities.invokeLater(() -> new ManageStudentsForm().setVisible(true));
+    // }
 }

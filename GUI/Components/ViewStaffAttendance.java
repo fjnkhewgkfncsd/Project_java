@@ -19,11 +19,11 @@ public class ViewStaffAttendance extends JFrame {
 
         // Header Panel
         JPanel headerPanel = new JPanel(new BorderLayout());
-        JLabel header = new JLabel("Attendance Records for " + staffName, SwingConstants.CENTER);
+        JLabel header = new JLabel("View Attendance", SwingConstants.CENTER);
         header.setFont(new Font("SansSerif", Font.BOLD, 24));
         headerPanel.add(header, BorderLayout.NORTH);
 
-        List<Attendance> attendances = FetchData.fetchAllStaffAttendances(staffId);
+        List<Attendance> attendances = FetchData.fetchAllStaffAttendances(staff.getId());
         AttendanceDisplay attendanceDisplay = new AttendanceDisplay(new ArrayList<>()); // Initialize with empty list
 
         if (attendances == null || attendances.isEmpty()) {
