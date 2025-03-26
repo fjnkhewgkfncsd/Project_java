@@ -68,7 +68,7 @@ public class AttendaceDAO {
             System.out.println("❌ Failed to connect to the database.");
             return;
         }
-        String sql = "INSERT INTO Staff_Attendance (staff_id, status, remark, Attendance_time, Attendance_date) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Staff_Attendance (sta_id, status, remark, Attendance_time, Attendance_date) VALUES (?, ?, ?, ?, ?)";
         try(PreparedStatement statement = conn.prepareStatement(sql)){
             LocalTime localTime = attendance.getTime();
             java.sql.Time sqlTime = java.sql.Time.valueOf(localTime);

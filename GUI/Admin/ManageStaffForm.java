@@ -245,8 +245,7 @@ public class ManageStaffForm extends JFrame {
                 return;
             }
 
-            String sql = "SELECT staff.staff_id, user.name, user.sex, staff.position, staff.salary " +
-                         "FROM staff INNER JOIN user ON staff.email = user.email";
+            String sql = "SELECT * from staff";
             PreparedStatement stmt = conn.prepareStatement(sql);
             ResultSet rs = stmt.executeQuery();
 

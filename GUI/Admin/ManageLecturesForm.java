@@ -160,6 +160,7 @@ public class ManageLecturesForm extends JFrame {
                 JOptionPane.showMessageDialog(this, "Lecture ID not found.", "Error", JOptionPane.ERROR_MESSAGE);
             }
             clearFields();
+            viewLectures();
         } catch (SQLException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Error updating salary.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -224,8 +225,7 @@ public class ManageLecturesForm extends JFrame {
 
     private void viewLectures() {
         try (Connection conn = DatabaseConnection.getConnection()) {
-            String sql = "SELECT lecturer.lecturer_id, user.name, user.sex, lecturer.specialization, lecturer.salary " +
-                         "FROM lecturer INNER JOIN user ON lecturer.email = user.email";
+            String sql = "SELECT * from lecturer";
             PreparedStatement stmt = conn.prepareStatement(sql);
             ResultSet rs = stmt.executeQuery();
 

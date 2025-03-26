@@ -231,8 +231,7 @@ public class ManageStudentsForm extends JFrame {
 
     private void viewStudents() {
         try (Connection conn = DatabaseConnection.getConnection()) {
-            String sql = "SELECT student.id, user.sex, student.major, student.school_fee " +
-                         "FROM student INNER JOIN user ON student.email = user.email"; // Removed name from SQL
+            String sql = "SELECT * from student"; // Removed name from SQL
             PreparedStatement stmt = conn.prepareStatement(sql);
             ResultSet rs = stmt.executeQuery();
 

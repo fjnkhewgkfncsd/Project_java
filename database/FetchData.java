@@ -86,7 +86,8 @@ public class FetchData {
                     resultSet.getDouble("School_fee"));
                 }else if(role.equals("Staff")){
                     return new Staff(user,
-                    resultSet.getString("position"));
+                    resultSet.getString("position"),
+                    resultSet.getInt("staff_id"));
                 }else{
                     return new Lecturer(user,
                     resultSet.getString("specialization"),
@@ -261,8 +262,7 @@ public class FetchData {
             System.out.println("❌ Failed to connect to the database.");
             return null;
         }
-        String sql = "SELECT user.name, user.email, user.phone_number, user.password, user.dob, user.sex, user.role, staff.position " +
-                     "FROM user INNER JOIN staff ON user.email = staff.email WHERE staff.staff_id = ?";
+        String sql = "SELECT * FROM staff WHERE staff_id = ?";
         try (PreparedStatement statement = conn.prepareStatement(sql)) {
             statement.setInt(1, person_id);
             ResultSet resultSet = statement.executeQuery();
@@ -276,8 +276,9 @@ public class FetchData {
                     resultSet.getString("sex").charAt(0),
                     resultSet.getString("role")
                 );
-                return new Staff(user, 
-                    resultSet.getString("position"));
+                return new Staff(user,
+                    resultSet.getString("position"), // Fetch position
+                    resultSet.getInt("staff_id"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
