@@ -71,16 +71,6 @@ public class Course {
         return courseList;
     }
 
-    public static boolean assignCourse(Student student, String courseCode, String group, String classroom, String year, String generation, String department, String schoolFee) {
-        Course course = getCourseByCode(courseCode);
-        if (course == null) {
-            return false; // Course not found
-        }
-        // Assuming Student class has a method to assign course with additional details
-        student.assignCourse(course, group, classroom, year, generation, department, schoolFee);
-        return true; // Course assigned successfully
-    }
-
     @Override
     public String toString() {
         return "Course Code: " + courseCode + "\n" +

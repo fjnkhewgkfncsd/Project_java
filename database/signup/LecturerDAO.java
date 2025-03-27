@@ -7,7 +7,7 @@ import database.DatabaseConnection;
 
 public class LecturerDAO extends UserDAO {
     public void insertLecturer(Lecturer lecturer, String tableName) {
-        String query = "UPDATE lecturers SET specialization=? WHERE email=?"; // Use email as the identifier
+        String query = "UPDATE lecturer SET specialization=? WHERE email=?"; // Use email as the identifier
         Connection conn = null;
         try {
             conn = DatabaseConnection.getConnection();
@@ -17,7 +17,7 @@ public class LecturerDAO extends UserDAO {
             
             try (PreparedStatement stmt = conn.prepareStatement(query)) {
                 stmt.setString(1, lecturer.getSpecialization());
-                stmt.setString(3, lecturer.getEmail()); // Match by email
+                stmt.setString(2, lecturer.getEmail()); // Match by email
                 stmt.executeUpdate();
             }
             conn.commit(); // Commit transaction
