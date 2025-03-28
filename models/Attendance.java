@@ -68,12 +68,10 @@ public class Attendance {
     // toString Method
     @Override
     public String toString() {
-        return "Attendance{" +
+        return 
                 "date=" + date +
                 ", time=" + time +
-                ", personId=" + personId +
-                ", status='" + status + '\'' +
-                ", remarks='" + remarks + '\'' +
-                '}';
+                ", status=" + status + ' ' +
+                ", remarks=" + remarks + ' ';
     }
 }

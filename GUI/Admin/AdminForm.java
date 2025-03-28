@@ -1,6 +1,9 @@
 package GUI.Admin;
 
 import javax.swing.*;
+
+import Application.MainGUI;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -84,7 +87,7 @@ public class AdminForm extends JFrame {
         manageCoursesButton.addActionListener(e -> openNewForm(new ManageCoursesForm()));
         manageLecturesButton.addActionListener(e -> openNewForm(new ManageLecturesForm()));
         registerButton.addActionListener(e -> openNewForm(new UserForm()));
-        backButton.addActionListener(e -> dispose());
+        backButton.addActionListener(e -> openNewForm(new MainGUI()));
     }
 
     private JButton createSidebarButton(String text, Font font) {
