@@ -21,74 +21,107 @@ public class UserForm extends JFrame {
 
     public UserForm() {
         setTitle("User Form");
-        setSize(600, 650);
+        setSize(900, 550);
+        setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        JPanel panel = new JPanel(new GridBagLayout());
+        JPanel mainPanel = new JPanel(new BorderLayout());
+        mainPanel.setBackground(Color.WHITE);
+
+        // Left panel (Sidebar)
+        JPanel sidebar = new JPanel();
+        sidebar.setBackground(new Color(45, 52, 54));
+        sidebar.setLayout(new BoxLayout(sidebar, BoxLayout.Y_AXIS));
+        sidebar.setPreferredSize(new Dimension(200, getHeight()));
+
+        JLabel titleLabel = new JLabel("User Form", JLabel.CENTER);
+        titleLabel.setForeground(Color.WHITE);
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        sidebar.add(Box.createVerticalStrut(20));
+        sidebar.add(titleLabel);
+        sidebar.add(Box.createVerticalGlue());
+
+        // Right panel (Main content area)
+        JPanel contentPanel = new JPanel(new GridBagLayout()) {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                Graphics2D g2d = (Graphics2D) g;
+                GradientPaint gp = new GradientPaint(0, 0, new Color(0, 172, 237), getWidth(), getHeight(), new Color(0, 102, 204));
+                g2d.setPaint(gp);
+                g2d.fillRect(0, 0, getWidth(), getHeight());
+            }
+        };
+
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.insets = new Insets(5, 5, 5, 5);
         gbc.anchor = GridBagConstraints.WEST;
 
-        panel.add(new JLabel("Role:"), gbc);
+        contentPanel.add(new JLabel("Role:"), gbc);
         gbc.gridx = 1;
         roleComboBox = new JComboBox<>(new String[]{"Student", "Staff", "Lecturer"});
-        panel.add(roleComboBox, gbc);
+        contentPanel.add(roleComboBox, gbc);
         gbc.gridx = 0; gbc.gridy++;
 
-        panel.add(new JLabel("Name:"), gbc);
+        contentPanel.add(new JLabel("Name:"), gbc);
         gbc.gridx = 1;
         nameField = new JTextField(15);
-        panel.add(nameField, gbc);
+        contentPanel.add(nameField, gbc);
 
         gbc.gridx = 0; gbc.gridy++;
-        panel.add(new JLabel("Email:"), gbc);
+        contentPanel.add(new JLabel("Email:"), gbc);
         gbc.gridx = 1;
         emailField = new JTextField(15);
-        panel.add(emailField, gbc);
+        contentPanel.add(emailField, gbc);
 
         gbc.gridx = 0; gbc.gridy++;
-        panel.add(new JLabel("Date of Birth (YYYY-MM-DD):"), gbc);
+        contentPanel.add(new JLabel("Date of Birth (YYYY-MM-DD):"), gbc);
         gbc.gridx = 1;
         dobField = new JTextField(15);
-        panel.add(dobField, gbc);
+        contentPanel.add(dobField, gbc);
 
         gbc.gridx = 0; gbc.gridy++;
-        panel.add(new JLabel("Sex:"), gbc);
+        contentPanel.add(new JLabel("Sex:"), gbc);
         gbc.gridx = 1;
         sexComboBox = new JComboBox<>(new String[]{"M", "F"});
-        panel.add(sexComboBox, gbc);
+        contentPanel.add(sexComboBox, gbc);
 
         gbc.gridx = 0; gbc.gridy++;
-        panel.add(new JLabel("Phone:"), gbc);
+        contentPanel.add(new JLabel("Phone:"), gbc);
         gbc.gridx = 1;
         phoneField = new JTextField(15);
-        panel.add(phoneField, gbc);
+        contentPanel.add(phoneField, gbc);
 
         gbc.gridx = 0; gbc.gridy++;
-        panel.add(new JLabel("Password:"), gbc);
+        contentPanel.add(new JLabel("Password:"), gbc);
         gbc.gridx = 1;
         passwordField = new JPasswordField(15);
-        panel.add(passwordField, gbc);
+        contentPanel.add(passwordField, gbc);
 
         extraFieldsPanel = new JPanel(new GridBagLayout());
         gbc.gridx = 0; gbc.gridy++;
-        panel.add(extraFieldsPanel, gbc);
+        contentPanel.add(extraFieldsPanel, gbc);
 
         roleComboBox.addActionListener(e -> updateFields());
         
         gbc.gridy++;
         submitButton = new JButton("Submit");
-        panel.add(submitButton, gbc);
+        contentPanel.add(submitButton, gbc);
         
         gbc.gridx = 1;
         messageLabel = new JLabel("", SwingConstants.CENTER);
         messageLabel.setForeground(Color.RED);
-        panel.add(messageLabel, gbc);
+        contentPanel.add(messageLabel, gbc);
 
-        add(panel);
+        mainPanel.add(sidebar, BorderLayout.WEST);
+        mainPanel.add(contentPanel, BorderLayout.CENTER);
+
+        add(mainPanel);
         updateFields();
         submitButton.addActionListener(e -> handleSubmit());
 

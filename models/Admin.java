@@ -3,9 +3,7 @@ package models;
 import java.util.List;
 
 public class Admin{
-    String username;
     String email;
-    int phoneNumber;
     private String password;
 
     // Default admin credentials
@@ -27,24 +25,13 @@ public class Admin{
         return email.equals(DEFAULT_EMAIL) && password.equals(DEFAULT_PASSWORD);
     }
 
-    public String getUsername() {
-        return username;
-    }
-    public void setUsername(String username) {
-        this.username = username;
-    }
     public String getEmail() {
         return email;
     }
     public void setEmail(String email) {
         this.email = email;
     }
-    public int getPhoneNumber() {
-        return phoneNumber;
-    }
-    public void setPhoneNumber(int phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
+
     public String getPassword() {
         return password;
     }
